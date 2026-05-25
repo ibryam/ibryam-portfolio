@@ -68,3 +68,12 @@ AI & Automation: Led Python-based AI projects using ChatGPT, Gemini, and Claude 
 ## Relocation & Availability
 
 Currently based between Bulgaria and Western Europe. Family in Geneva, Switzerland; uncle in Oberstdorf, Germany (Swiss border). Relocation logistics to DACH already in place. EU citizen — no work permit required. Available for relocation to Switzerland, Germany, or Austria. Open to hybrid and remote roles.
+
+
+## Hobbies & Interests
+
+ata professional with a strong foundation in data engineering and data analytics, driven by curiosity and a constant desire to learn. Beyond my technical work, I have a deep appreciation for language, philosophy, and autobiographical literature, which shape the way I think about both problems and people. I enjoy spending time outdoors through hiking and wandering, as well as recharging with piano and classical music.
+
+I maintain an active lifestyle through regular gym workouts and fitness training, and I value traveling as a way to broaden perspective. Currently, I am particularly focused on advancing my skills in AI engineering, with a growing interest in agentic AI systems, MCP, and retrieval-augmented generation (RAG). I actively explore and experiment with modern AI tools, with Claude being my preferred assistant in daily use.
+
+I am also interested in financial markets and strongly believe in delayed gratification as a guiding principle, both professionally and personally. This mindset influences my approach to growth, discipline, and long-term success.

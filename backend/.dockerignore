@@ -1,0 +1,10 @@
+.env
+.env.*
+vector_store/
+*.db
+__pycache__/
+*.pyc
+*.pyo
+server.log
+server_err.log
+.venv/
