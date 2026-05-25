@@ -18,47 +18,35 @@ def _get_client() -> Groq:
     return _client
 
 
-EVAL_PROMPT = """You are a strict evaluator reviewing an AI assistant's response on behalf of a job candidate's portfolio.
+_EVAL_SYSTEM = (
+    "You are a quality evaluator for an AI assistant representing Ibryam Faik on his portfolio website. "
+    "Visitors are HR recruiters asking about his career.\n\n"
+    "The assistant has access to a full profile document AND the specific context excerpts shown below. "
+    "APPROVE if the response is professional, on-topic, and plausibly consistent with the profile of a "
+    "senior data engineer (BigQuery, dbt, Tableau, Python, AI/LLM projects). "
+    "REJECT only if the response is clearly fabricated, off-topic, or unprofessional.\n\n"
+    'Return ONLY compact JSON: {"decision": "APPROVED" or "REJECTED", "confidence": 0-100, "reason": "one sentence"}\n'
+    "No prose. No markdown. First char must be { last must be }."
+)
 
-The assistant is acting as Ibryam Faik and answering questions from HR recruiters.
 
-Your task: decide if the response is APPROVED or REJECTED.
-
-APPROVE if:
-- The response accurately answers the question using the provided context
-- The tone is professional and represents the candidate well
-- No false claims or invented facts
-
-REJECT if:
-- The response contains fabricated facts not in the context
-- The response is off-topic or irrelevant
-- The response is unprofessional or harmful
-
-Return ONLY a compact JSON object with these exact keys:
-{"decision": "APPROVED" or "REJECTED", "confidence": 0-100, "reason": "one sentence"}
-
-No prose. No markdown. First char must be {{ last must be }}.
-
----
-USER QUESTION: {query}
-
-CONTEXT USED:
-{context}
-
-ASSISTANT RESPONSE:
-{response}
-"""
+def _build_eval_prompt(query: str, ctx: str, response: str) -> str:
+    return (
+        "USER QUESTION: " + query
+        + "\n\nCONTEXT USED:\n" + ctx[:2000]
+        + "\n\nASSISTANT RESPONSE:\n" + response
+    )
 
 
 def evaluate(query: str, context_chunks: list[str], response: str) -> dict:
     ctx = "\n\n".join(context_chunks) if context_chunks else "(no RAG context — general knowledge used)"
-    prompt = EVAL_PROMPT.format(query=query, context=ctx[:2000], response=response)
+    prompt = _build_eval_prompt(query, ctx, response)
 
     try:
         completion = _get_client().chat.completions.create(
             model=GROQ_MODEL,
             messages=[
-                {"role": "system", "content": "Return strict JSON only. No prose."},
+                {"role": "system", "content": _EVAL_SYSTEM},
                 {"role": "user", "content": prompt},
             ],
             temperature=0,

@@ -6,23 +6,26 @@ from memory import save_lead, search_faq, get_recent_history
 
 load_dotenv(override=True)
 
+_TELEGRAM_API = "https://api.telegram.org/bot"
 
-# ── Pushover ─────────────────────────────────────────────────────────────────
 
-def _pushover(title: str, message: str) -> None:
-    token = os.getenv("PUSHOVER_TOKEN")
-    user = os.getenv("PUSHOVER_USER")
-    if not token or not user:
-        print(f"[pushover] disabled — {title}: {message}")
+# ── Telegram ──────────────────────────────────────────────────────────────────
+
+def _telegram(title: str, message: str) -> None:
+    token = os.getenv("TELEGRAM_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        print(f"[telegram] disabled — {title}: {message}")
         return
+    text = f"<b>{title}</b>\n{message}"
     try:
         requests.post(
-            "https://api.pushover.net/1/messages.json",
-            data={"token": token, "user": user, "title": title, "message": message},
+            url=f"{_TELEGRAM_API}{token}/sendMessage",
+            params={"chat_id": chat_id, "text": text, "parse_mode": "HTML", "disable_web_page_preview": "true"},
             timeout=8,
         )
     except Exception as e:
-        print(f"[pushover] error: {e}")
+        print(f"[telegram] error: {e}")
 
 
 # ── Tool functions ────────────────────────────────────────────────────────────

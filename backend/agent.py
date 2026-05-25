@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import OpenAI, RateLimitError
 
 from memory import save_message, get_recent_history
 from rag import retrieve_context
@@ -80,37 +80,38 @@ def chat(message: str, session_id: str, history: list[dict] | None = None) -> st
         messages.append({"role": msg["role"], "content": msg["content"]})
     messages.append({"role": "user", "content": message})
 
-    for _ in range(MAX_TOOL_ROUNDS):
-        response = _client.chat.completions.create(
-            model=MODEL,
-            messages=messages,
-            tools=_TOOLS,
-        )
-        choice = response.choices[0]
+    try:
+        for _ in range(MAX_TOOL_ROUNDS):
+            response = _client.chat.completions.create(
+                model=MODEL,
+                messages=messages,
+                tools=_TOOLS,
+            )
+            choice = response.choices[0]
 
-        if choice.finish_reason == "tool_calls":
-            tool_calls = choice.message.tool_calls
-            messages.append(choice.message)  # assistant message with tool_calls
+            if choice.finish_reason == "tool_calls":
+                tool_calls = choice.message.tool_calls
+                messages.append(choice.message)
 
-            for tc in tool_calls:
-                args = json.loads(tc.function.arguments)
-                # Inject session_id for tools that need it
-                if tc.function.name in ("record_user_details", "get_session_context"):
-                    args.setdefault("session_id", session_id)
-                result = dispatch_tool(tc.function.name, args)
-                messages.append({
-                    "role": "tool",
-                    "tool_call_id": tc.id,
-                    "content": result,
-                })
-        else:
-            # Final text response
-            final_text = (choice.message.content or "").strip()
-            if not final_text:
-                final_text = "I'm not sure how to answer that. Would you like Ibryam to follow up directly?"
+                for tc in tool_calls:
+                    args = json.loads(tc.function.arguments)
+                    if tc.function.name in ("record_user_details", "get_session_context"):
+                        args.setdefault("session_id", session_id)
+                    result = dispatch_tool(tc.function.name, args)
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": result,
+                    })
+            else:
+                final_text = (choice.message.content or "").strip()
+                if not final_text:
+                    final_text = "I'm not sure how to answer that. Would you like Ibryam to follow up directly?"
+                save_message(session_id, "user", message)
+                save_message(session_id, "assistant", final_text)
+                return final_text
 
-            save_message(session_id, "user", message)
-            save_message(session_id, "assistant", final_text)
-            return final_text
+    except RateLimitError:
+        return "I'm temporarily busy — please try again in a moment."
 
     return "I ran into an issue generating a response. Please try again."
