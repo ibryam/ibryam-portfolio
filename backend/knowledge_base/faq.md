@@ -6,16 +6,19 @@
 A: I am currently a Senior Data Analyst at UKG (formerly Kronos / Ultimate Software), a global HR and workforce management software company. I joined in July 2022 and have been working there for over 3 years. In total I have over 5 years of experience across data roles — starting at Experian as a Financial Analyst and before that at Dell Technologies in sales, where I was already deeply involved with data and CRM analytics.
 
 **Q: What is your notice period / when are you available?**
-A: For discussions about availability and notice period, I recommend reaching out to Ibryam directly at ibryamfibryam@gmail.com — he would be happy to discuss timelines based on the specific opportunity.
+A: Ibryam's notice period is 4 weeks. He is actively looking and can be available within that timeframe once an offer is agreed. Feel free to share your timeline and he will confirm availability.
 
 **Q: What are your salary expectations?**
-A: Salary expectations are best discussed directly with Ibryam based on the specific role, company, and location. Feel free to contact him at ibryamfibryam@gmail.com.
+A: Ibryam prefers not to anchor on a specific number upfront — he is more focused on finding the right role and team where he can prove his value. That said, he does expect compensation that is in line with the market average for a senior data engineer in the relevant country and city. He is genuinely motivated by the work, not just the pay, but fair compensation matters.
 
 **Q: Are you open to relocation?**
-A: Yes, actively. My clear career destination is the DACH region — Germany, Austria, and Switzerland. I have family in Geneva, Switzerland, and my uncle lives in Oberstdorf, Germany (on the Swiss border), so accommodation is already in place. As an EU citizen there are no work permit barriers. I am also studying German and expect to reach B1 by June 2026.
+A: Absolutely yes. Ibryam is actively targeting the DACH region — Germany, Austria, and Switzerland. He has family in Geneva, Switzerland, and his uncle lives in Oberstdorf, Germany, so accommodation is already available. As an EU citizen he brings no visa or work permit complexity to any employer in Europe — he can start without any bureaucratic delay. He is aware of all practical relocation requirements and is prepared for a smooth transition.
 
 **Q: Are you open to remote work?**
 A: Yes, open to both remote and hybrid arrangements. Currently working for UKG, a US-headquartered company, in a predominantly remote setup.
+
+**Q: What is Ibryam's favourite football team?**
+A: Ibryam's favourite football team is Chelsea FC.
 
 ---
 
@@ -75,7 +78,7 @@ A: On Tableau Public: https://public.tableau.com/app/profile/ibryam — both the
 A: On GitHub: https://github.com/ibryam — all personal projects are public or documented in the portfolio.
 
 **Q: What is this chatbot built with?**
-A: This chatbot is an agentic AI assistant built with Python and FastAPI. It uses Gemini 2.5 Flash as the main LLM (free tier via Google AI Studio), a Groq-hosted llama-3.3-70b as an evaluator/quality gate, ChromaDB for RAG over my personal documents, SQLite for FAQ structured lookup and conversation memory, and Pushover for agentic notifications. The portfolio is deployed on Cloudflare Pages and the backend on HuggingFace Spaces — entirely free to run.
+A: This chatbot is an agentic AI assistant built with Python and FastAPI. The main LLM is OpenAI gpt-4o-mini, with a Gemini / Groq dual-layer evaluator for response quality. It uses ChromaDB for RAG over personal documents, SQLite for FAQ and conversation memory, and Telegram for agentic notifications. The portfolio is deployed on Cloudflare Pages and the backend on HuggingFace Spaces — entirely free to run.
 
 ---
 

@@ -33,11 +33,11 @@ _PROFILE = _load_profile()
 
 _FAQ_INLINE = """## KEY HR QUESTIONS — answer directly from these, do not guess
 
-Notice period / availability: Recommend reaching out directly at ibryamfibryam@gmail.com to discuss timelines based on the specific opportunity.
-Salary expectations: Best discussed directly with Ibryam based on role, company, and location. Contact ibryamfibryam@gmail.com.
-Relocation: Actively targeting the DACH region (Germany, Austria, Switzerland). Family in Geneva and Oberstdorf. EU citizen — no work permit barriers. German B1 target June 2026.
+Notice period: 4 weeks. Ibryam is actively looking and can start within that timeframe once an offer is agreed.
+Salary expectations: Ibryam prefers not to anchor on a specific number — he is focused on finding the right role where he can prove his value. He expects compensation in line with the market average for a senior data engineer in the relevant country. He is motivated by the work, not just pay, but fair compensation that covers living costs matters.
+Relocation: Absolutely open. Targeting DACH region (Germany, Austria, Switzerland). Family in Geneva and uncle in Oberstdorf — accommodation already available. As an EU citizen he brings zero visa/permit complexity to any European employer and can start without bureaucratic delay. He is aware of all relocation requirements and prepared for a smooth transition.
 Remote / hybrid: Open to both. Currently works remotely for UKG (US-headquartered).
-Start date: Discuss directly with Ibryam at ibryamfibryam@gmail.com."""
+Favourite football team: Chelsea FC."""
 
 
 def _build_system_prompt(rag_chunks: list[str]) -> str:

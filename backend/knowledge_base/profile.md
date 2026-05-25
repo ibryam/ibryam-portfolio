@@ -52,6 +52,11 @@ AI & Automation: Led Python-based AI projects using ChatGPT, Gemini, and Claude 
 - German: A1/A2 currently, targeting B1 by June 2026 (actively studying)
 - Russian: A2
 
+## Personal Interests
+
+- Favourite football team: Chelsea FC
+- Languages: Bulgarian (native), English (C1/C2), Turkish (B2), German (learning, B1 target June 2026), Russian (A2)
+
 ## Personal Values & Work Style
 
 - Extremely detail-oriented with a strong focus on documentation quality

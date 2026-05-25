@@ -57,31 +57,32 @@ def init_db() -> None:
 
 
 def _seed_faq(conn: sqlite3.Connection) -> None:
-    count = conn.execute("SELECT COUNT(*) FROM faq").fetchone()[0]
-    if count > 0:
-        return
-
     faq_path = Path(__file__).parent / "knowledge_base" / "faq.md"
     if not faq_path.exists():
         return
 
     text = faq_path.read_text(encoding="utf-8")
-    # Parse Q/A blocks: **Q: ...** / A: ...
     pattern = re.compile(
         r"\*\*Q:\s*(.+?)\*\*\s*\nA:\s*(.+?)(?=\n\*\*Q:|\Z)",
         re.DOTALL,
     )
     rows = []
     for m in pattern.finditer(text):
-        question = m.group(1).strip()
+        question = m.group(1).strip().strip('"')
         answer = m.group(2).strip()
         rows.append((question, answer, "general"))
 
-    if rows:
-        conn.executemany(
-            "INSERT INTO faq (question, answer, category) VALUES (?, ?, ?)", rows
-        )
-        conn.execute("INSERT INTO faq_fts(faq_fts) VALUES('rebuild')")
+    if not rows:
+        return
+
+    # Always wipe and reseed so faq.md changes take effect on restart
+    conn.execute("DELETE FROM faq")
+    conn.execute("DELETE FROM faq_fts")
+    conn.executemany(
+        "INSERT INTO faq (question, answer, category) VALUES (?, ?, ?)", rows
+    )
+    conn.execute("INSERT INTO faq_fts(faq_fts) VALUES('rebuild')")
+    print(f"[db] FAQ seeded — {len(rows)} entries")
 
 
 # ── Conversation memory ──────────────────────────────────────────────────────
