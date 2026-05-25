@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ibryam Faik — Data & AI Engineer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #1B2A4A;
+      --navy-light: #1F3156;
+      --navy-card:  #162444;
+      --teal:       #2EC4A6;
+      --gold:       #E8A838;
+      --purple:     #9B72CF;
+      --blue:       #5B9BD5;
+      --text:       #E8EDF5;
+      --muted:      #8FA3C0;
+      --border:     rgba(46,196,166,0.2);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(27,42,74,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .nav-name { font-weight: 700; font-size: 1rem; color: var(--teal); letter-spacing: 0.5px; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-chat-btn {
+      background: var(--teal); color: var(--navy); border: none;
+      border-radius: 6px; padding: 0.35rem 0.9rem;
+      font-size: 0.85rem; font-weight: 700; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav-chat-btn:hover { background: #26b395; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      background: radial-gradient(ellipse at 50% 60%, rgba(46,196,166,0.07) 0%, transparent 70%);
+    }
+    .hero-inner { max-width: 720px; }
+    .hero-pills {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      justify-content: center; margin-bottom: 1.5rem;
+    }
+    .hero-pill {
+      border-radius: 20px; padding: 0.3rem 1rem;
+      font-size: 0.8rem; letter-spacing: 0.5px; text-transform: uppercase;
+      border: 1px solid rgba(46,196,166,0.25); color: var(--muted);
+      background: rgba(255,255,255,0.04);
+    }
+    .pill-active { background: rgba(46,196,166,0.12); color: var(--teal); border-color: rgba(46,196,166,0.4); }
+    .hero-logos {
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      justify-content: center; align-items: center;
+      margin-top: 2.5rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .hero-logos img, .hero-logos .logo-text-badge {
+      width: 30px; height: 30px; object-fit: contain;
+      opacity: 0.6; filter: brightness(0) invert(0.9);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .hero-logos img:hover, .hero-logos .logo-text-badge:hover { opacity: 1; transform: translateY(-2px); }
+    .hero-logos .logo-text-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px;
+      color: #fff; border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 4px; padding: 2px 4px;
+      width: auto; height: 30px; white-space: nowrap; filter: none;
+    }
+    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.2rem; color: #fff; }
+    .hero h1 span { color: var(--teal); }
+    .hero-sub { font-size: 1.1rem; color: var(--muted); max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn { display: inline-block; padding: 0.75rem 1.8rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; }
+    .btn-primary { background: var(--teal); color: var(--navy); }
+    .btn-primary:hover { background: #26b395; transform: translateY(-1px); }
+    .btn-outline { border: 1px solid var(--border); color: var(--text); background: transparent; }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-1px); }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-gold:hover { background: #d4942e; transform: translateY(-1px); }
+
+    /* ── STATS BAR ── */
+    .stats { background: var(--navy-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.8rem 2rem; }
+    .stats-inner { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; text-align: center; }
+    .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--teal); }
+    .stat-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 2rem; }
+    .section-inner { max-width: 960px; margin: 0 auto; }
+    .section-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--teal); margin-bottom: 0.6rem; }
+    .section-title { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: #fff; margin-bottom: 1rem; }
+    .section-desc { color: var(--muted); max-width: 600px; margin-bottom: 3rem; line-height: 1.7; }
+
+    /* ── PROJECT CARDS ── */
+    .projects-grid { display: grid; gap: 2rem; }
+    .project-card {
+      background: var(--navy-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2.5rem;
+      transition: border-color 0.3s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent, var(--teal)); }
+    .project-card:hover { border-color: var(--accent, var(--teal)); transform: translateY(-3px); }
+    .project-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .project-title { font-size: 1.35rem; font-weight: 700; color: #fff; }
+    .project-badge { font-size: 0.72rem; background: rgba(46,196,166,0.15); color: var(--teal); border: 1px solid rgba(46,196,166,0.3); border-radius: 20px; padding: 0.2rem 0.7rem; font-weight: 600; white-space: nowrap; }
+    .project-links { display: flex; gap: 0.6rem; flex-shrink: 0; flex-wrap: wrap; }
+    .project-link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+    .link-dashboard { background: var(--accent, var(--teal)); color: var(--navy); }
+    .link-dashboard:hover { opacity: 0.85; }
+    .link-github { border: 1px solid var(--border); color: var(--muted); }
+    .link-github:hover { color: var(--text); border-color: var(--muted); }
+    .project-summary { font-size: 1rem; color: var(--text); margin-bottom: 1.2rem; line-height: 1.7; }
+    .project-what { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.7; }
+    .project-highlights { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin-bottom: 1.8rem; }
+    .highlight { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 0.8rem 1rem; }
+    .highlight-val { font-size: 1.1rem; font-weight: 700; color: var(--accent, var(--teal)); }
+    .highlight-label { font-size: 0.78rem; color: var(--muted); }
+    .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tech-badge { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 0.25rem 0.8rem; font-size: 0.78rem; color: var(--muted); }
+
+    /* ── SKILLS ── */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+    .skill-group { background: var(--navy-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .skill-group-title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 1rem; }
+    .skill-item { font-size: 0.9rem; color: var(--text); padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .skill-item:last-child { border-bottom: none; }
+
+    /* ── ABOUT ── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    .about-text p { color: var(--muted); line-height: 1.8; margin-bottom: 1rem; }
+    .about-text p strong { color: var(--text); }
+    .about-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+    .about-tag { background: rgba(46,196,166,0.1); border: 1px solid rgba(46,196,166,0.2); color: var(--teal); border-radius: 20px; padding: 0.3rem 0.9rem; font-size: 0.82rem; }
+    .about-card { background: var(--navy-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.8rem; }
+    .about-card-title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 1.2rem; }
+    .about-card-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; }
+    .about-card-item:last-child { border-bottom: none; }
+    .about-card-item span:first-child { color: var(--muted); }
+    .about-card-item span:last-child { color: var(--text); font-weight: 600; }
+
+    /* ── TIMELINE ── */
+    .timeline { position: relative; padding-left: 1.8rem; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+    .tl-item { position: relative; padding-bottom: 2rem; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot { position: absolute; left: -2.05rem; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--teal); border: 2px solid var(--navy-light); }
+    .tl-dot-edu { background: var(--muted); }
+    .tl-header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; margin-bottom: 0.35rem; }
+    .tl-role { font-weight: 700; color: #fff; font-size: 0.95rem; }
+    .tl-company { color: var(--teal); font-size: 0.85rem; }
+    .tl-edu .tl-company { color: var(--muted); }
+    .tl-years { margin-left: auto; color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+    .tl-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 0.6rem; }
+    .tl-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    /* ── VIZ EMBED ── */
+    .viz-container { width: 100%; overflow: hidden; position: relative; border-radius: 10px; border: 1px solid var(--border); margin-top: 1.8rem; background: #0d1b33; }
+    .viz-scaler { transform-origin: top left; }
+    .viz-scaler .tableauPlaceholder, .viz-scaler .tableauViz { display: block; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--navy-light); border-top: 1px solid var(--border); padding: 2.5rem 2rem; text-align: center; }
+    .footer-links { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--teal); }
+    .footer-copy { font-size: 0.8rem; color: var(--muted); }
+
+    /* ── CHAT WIDGET ── */
+    #chat-toggle {
+      position: fixed; bottom: 1.8rem; right: 1.8rem; z-index: 500;
+      width: 58px; height: 58px; border-radius: 50%;
+      background: var(--teal); color: var(--navy);
+      border: none; font-size: 1.5rem; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(46,196,166,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #chat-toggle:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(46,196,166,0.55); }
+
+    #chat-panel {
+      position: fixed; bottom: 5.2rem; right: 1.8rem; z-index: 499;
+      width: 370px; height: 520px;
+      background: #0f1e38; border: 1px solid var(--border);
+      border-radius: 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      display: flex; flex-direction: column; overflow: hidden;
+      opacity: 0; pointer-events: none;
+      transform: translateY(16px) scale(0.97);
+      transition: opacity 0.22s, transform 0.22s;
+    }
+    #chat-panel.open { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
+
+    .chat-header {
+      background: var(--teal); padding: 1rem 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .chat-header-left { display: flex; flex-direction: column; }
+    .chat-header-name { font-weight: 700; color: var(--navy); font-size: 0.95rem; }
+    .chat-header-sub { font-size: 0.75rem; color: rgba(27,42,74,0.75); margin-top: 1px; }
+    .chat-header-close { background: none; border: none; color: var(--navy); font-size: 1.2rem; cursor: pointer; opacity: 0.7; transition: opacity 0.15s; }
+    .chat-header-close:hover { opacity: 1; }
+
+    #chat-messages {
+      flex: 1; overflow-y: auto; padding: 1rem;
+      display: flex; flex-direction: column; gap: 0.75rem;
+      scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+    }
+
+    .chat-msg { max-width: 85%; padding: 0.65rem 0.9rem; border-radius: 12px; font-size: 0.88rem; line-height: 1.55; word-wrap: break-word; }
+    .chat-msg-user { align-self: flex-end; background: var(--gold); color: var(--navy); border-bottom-right-radius: 3px; font-weight: 500; }
+    .chat-msg-bot { align-self: flex-start; background: #1a2f52; color: var(--text); border-bottom-left-radius: 3px; border: 1px solid var(--border); }
+    .chat-msg-typing { align-self: flex-start; background: #1a2f52; border: 1px solid var(--border); border-radius: 12px; border-bottom-left-radius: 3px; padding: 0.65rem 1rem; }
+    .typing-dots { display: flex; gap: 4px; }
+    .typing-dots span { width: 7px; height: 7px; background: var(--muted); border-radius: 50%; animation: typingBounce 1.2s infinite; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+
+    .chat-suggestions { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.25rem; }
+    .chat-suggestion {
+      background: rgba(46,196,166,0.1); border: 1px solid rgba(46,196,166,0.25);
+      color: var(--teal); border-radius: 20px; padding: 0.3rem 0.75rem;
+      font-size: 0.78rem; cursor: pointer; transition: background 0.15s;
+    }
+    .chat-suggestion:hover { background: rgba(46,196,166,0.2); }
+
+    #chat-input-bar {
+      padding: 0.75rem; border-top: 1px solid rgba(46,196,166,0.15);
+      display: flex; gap: 0.5rem; align-items: center;
+      background: #0f1e38;
+    }
+    #chat-input {
+      flex: 1; background: #1a2f52; color: var(--text);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 0.55rem 0.85rem; font-size: 0.88rem;
+      outline: none; transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    #chat-input:focus { border-color: var(--teal); }
+    #chat-input::placeholder { color: var(--muted); }
+    #chat-send {
+      background: var(--teal); color: var(--navy);
+      border: none; border-radius: 10px;
+      padding: 0.55rem 0.9rem; font-size: 1rem;
+      cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+    }
+    #chat-send:hover { background: #26b395; }
+    #chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .project-header { flex-direction: column; }
+      .nav-links { display: none; }
+      #chat-panel { width: calc(100vw - 2rem); right: 1rem; bottom: 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-name">Ibryam Faik</span>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <button class="nav-chat-btn" onclick="toggleChat()">💬 Ask AI</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-pills">
+      <span class="hero-pill pill-active">Data Engineer</span>
+      <span class="hero-pill">AI Builder</span>
+      <span class="hero-pill">Analytics Engineer</span>
+      <span class="hero-pill">Data Analyst</span>
+    </div>
+    <h1>Ibryam Faik<br><span>Data & AI Engineer</span></h1>
+    <p class="hero-sub">
+      5+ years turning complex data into decisions that matter —
+      from financial reporting at Experian to automated pipelines, live dashboards,
+      and AI-driven tools at UKG.<br>
+      I bridge raw data, modern engineering, and LLM-powered automation.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <button class="btn btn-gold" onclick="toggleChat()">💬 Ask my AI</button>
+      <a href="https://www.linkedin.com/in/ibryam" target="_blank" class="btn btn-outline">LinkedIn</a>
+    </div>
+
+    <div class="hero-logos">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/tableau.svg" alt="Tableau" title="Tableau">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" title="Python">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="SQL" title="SQL">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/dbt.svg" alt="dbt" title="dbt">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/googlebigquery.svg" alt="BigQuery" title="BigQuery">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/githubactions.svg" alt="GitHub Actions" title="GitHub Actions">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/googlegemini.svg" alt="Gemini" title="Google Gemini">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pandas/pandas-original.svg" alt="Pandas" title="Pandas">
+      <span class="logo-text-badge" title="LangChain">LangChain</span>
+      <span class="logo-text-badge" title="Alteryx">Alteryx</span>
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/jira.svg" alt="Jira" title="Jira">
+      <span class="logo-text-badge" title="FastAPI">FastAPI</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats">
+  <div class="stats-inner">
+    <div><div class="stat-num">5+</div><div class="stat-label">Years in Data</div></div>
+    <div><div class="stat-num">7</div><div class="stat-label">Personal Projects</div></div>
+    <div><div class="stat-num">4</div><div class="stat-label">AI / LLM Projects</div></div>
+    <div><div class="stat-num">27+</div><div class="stat-label">Automated Data Tests</div></div>
+    <div><div class="stat-num">0 CHF</div><div class="stat-label">Infrastructure Cost</div></div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-label">Portfolio</div>
+    <h2 class="section-title">End-to-End Projects</h2>
+    <p class="section-desc">
+      From automated data pipelines and live dashboards to multi-agent AI systems —
+      all fully automated, all source code public on GitHub.
+    </p>
+
+    <div class="projects-grid">
+
+      <!-- Swiss Macro Monitor -->
+      <div class="project-card" style="--accent: #2EC4A6;">
+        <div class="project-header">
+          <div>
+            <div class="project-title">Swiss Macro Monitor</div>
+          </div>
+          <div class="project-links">
+            <a href="https://public.tableau.com/app/profile/ibryam/viz/SwissMacroMonitor/Overview" target="_blank" class="project-link link-dashboard">Live Dashboard ↗</a>
+            <a href="https://github.com/ibryam/swiss-macro-monitor" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+        <p class="project-summary">
+          A self-updating platform monitoring the health of the Swiss economy in real time —
+          tracking 15 key indicators (interest rates, GDP, inflation, unemployment, exchange rates)
+          and classifying each as bullish, bearish, or neutral.
+        </p>
+        <p class="project-what">
+          Data is pulled automatically every month from SNB, FRED, and OECD through a full dbt pipeline
+          with 27 automated quality tests before reaching the dashboard.
+        </p>
+        <div class="project-highlights">
+          <div class="highlight"><div class="highlight-val">15</div><div class="highlight-label">Swiss economic indicators</div></div>
+          <div class="highlight"><div class="highlight-val">27</div><div class="highlight-label">Automated quality tests</div></div>
+          <div class="highlight"><div class="highlight-val">3</div><div class="highlight-label">Official sources (SNB, FRED, OECD)</div></div>
+          <div class="highlight"><div class="highlight-val">Monthly</div><div class="highlight-label">Fully automated refresh</div></div>
+        </div>
+        <div class="tech-stack">
+          <span class="tech-badge">Python</span><span class="tech-badge">Google BigQuery</span>
+          <span class="tech-badge">dbt Core</span><span class="tech-badge">GitHub Actions</span>
+          <span class="tech-badge">Tableau Public</span><span class="tech-badge">SNB API</span>
+          <span class="tech-badge">FRED API</span><span class="tech-badge">OECD API</span>
+        </div>
+        <div class="viz-container" id="container-swiss">
+          <div class="viz-scaler" id="scaler-swiss" data-w="1200" data-h="868" style="width:1200px;height:868px;">
+            <iframe src="https://public.tableau.com/views/SwissMacroMonitor/Overview?:showVizHome=no&:embed=true&:tabs=yes&:toolbar=bottom&:animate_transition=yes&:display_count=yes&:language=en-US"
+                    width="1200" height="868" frameborder="0" scrolling="no" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- SMI Risk Monitor -->
+      <div class="project-card" style="--accent: #9B72CF;">
+        <div class="project-header">
+          <div><div class="project-title">SMI Risk Monitor</div></div>
+          <div class="project-links">
+            <a href="https://public.tableau.com/app/profile/ibryam/viz/SMIRiskMonitor/Performance" target="_blank" class="project-link link-dashboard" style="background:#9B72CF;">Live Dashboard ↗</a>
+            <a href="https://github.com/ibryam/smi-risk-monitor" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+        <p class="project-summary">
+          A daily risk monitoring tool for the Swiss Market Index (SMI) — tracking all 20 SMI companies
+          with performance, volatility, and drawdown metrics updated every trading day.
+        </p>
+        <p class="project-what">
+          Market data is collected automatically after each trading session, stored in BigQuery,
+          transformed, and published to a 3-tab Tableau dashboard.
+        </p>
+        <div class="project-highlights">
+          <div class="highlight"><div class="highlight-val">20</div><div class="highlight-label">SMI stocks tracked daily</div></div>
+          <div class="highlight"><div class="highlight-val">Daily</div><div class="highlight-label">Automated pipeline after close</div></div>
+          <div class="highlight"><div class="highlight-val">3</div><div class="highlight-label">Dashboard tabs: Perf, Risk, Dive</div></div>
+          <div class="highlight"><div class="highlight-val">SIX</div><div class="highlight-label">Swiss Exchange coverage</div></div>
+        </div>
+        <div class="tech-stack">
+          <span class="tech-badge">Python</span><span class="tech-badge">Google BigQuery</span>
+          <span class="tech-badge">dbt Core</span><span class="tech-badge">GitHub Actions</span>
+          <span class="tech-badge">Tableau Public</span>
+        </div>
+        <div class="viz-container" id="container-smi">
+          <div class="viz-scaler" id="scaler-smi" style="width:900px;height:1167px;">
+            <iframe src="https://public.tableau.com/views/SMIRiskMonitor/Performance?:showVizHome=no&:embed=true&:tabs=yes&:toolbar=bottom&:animate_transition=yes&:display_count=yes&:language=en-US"
+                    width="900" height="1167" frameborder="0" scrolling="no" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- ATS Skipper -->
+      <div class="project-card" style="--accent: #E8A838;">
+        <div class="project-header">
+          <div>
+            <div class="project-title">ATS Skipper v2</div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/ibryam/ats-skipper" target="_blank" class="project-link link-dashboard" style="background:#E8A838;">GitHub ↗</a>
+          </div>
+        </div>
+        <p class="project-summary">
+          A multi-agent job application system that scrapes 4 job boards, scores each role
+          across 8 weighted dimensions using Gemini AI, and auto-generates tailored CVs
+          and cover letters as .docx files — ready to submit.
+        </p>
+        <p class="project-what">
+          Scrapes LinkedIn, jobs.ch, jobscout24.ch, and xing.com. Scores matches from A+ to F.
+          Generates bespoke CV + cover letter per application (German JD → German letter).
+          Tracks everything in a 20-column CSV pipeline with Pushover notifications.
+        </p>
+        <div class="project-highlights">
+          <div class="highlight"><div class="highlight-val">4</div><div class="highlight-label">Job boards scraped</div></div>
+          <div class="highlight"><div class="highlight-val">8</div><div class="highlight-label">Scoring dimensions (A+ to F)</div></div>
+          <div class="highlight"><div class="highlight-val">Multi-LLM</div><div class="highlight-label">Gemini primary · Groq fallback</div></div>
+          <div class="highlight"><div class="highlight-val">Auto</div><div class="highlight-label">CV + cover letter per job</div></div>
+        </div>
+        <div class="tech-stack">
+          <span class="tech-badge">Python</span><span class="tech-badge">Gemini 2.5 Flash</span>
+          <span class="tech-badge">Groq (llama-3.3-70b)</span><span class="tech-badge">Selenium</span>
+          <span class="tech-badge">python-docx</span><span class="tech-badge">Multi-agent</span>
+        </div>
+      </div>
+
+      <!-- Flight Deals -->
+      <div class="project-card" style="--accent: #5B9BD5;">
+        <div class="project-header">
+          <div><div class="project-title">Flight Deals Finder</div></div>
+          <div class="project-links">
+            <a href="https://github.com/ibryam/flight-deals" target="_blank" class="project-link link-dashboard" style="background:#5B9BD5;">GitHub ↗</a>
+          </div>
+        </div>
+        <p class="project-summary">
+          A fully automated weekly flight price monitor that scans configured routes,
+          compares against per-destination thresholds, and sends instant Telegram alerts
+          when a deal drops below your target — no server required.
+        </p>
+        <p class="project-what">
+          Runs every Monday 6am UTC via GitHub Actions. Reads origins and destinations from
+          a Google Sheet. Searches SerpAPI for prices, then fires a Telegram message with
+          airline, price, and Google Flights link.
+        </p>
+        <div class="project-highlights">
+          <div class="highlight"><div class="highlight-val">Weekly</div><div class="highlight-label">Automated via GitHub Actions</div></div>
+          <div class="highlight"><div class="highlight-val">Google Sheet</div><div class="highlight-label">No-code config for routes</div></div>
+          <div class="highlight"><div class="highlight-val">Telegram</div><div class="highlight-label">Instant deal alerts</div></div>
+          <div class="highlight"><div class="highlight-val">€0</div><div class="highlight-label">Running cost (free tier APIs)</div></div>
+        </div>
+        <div class="tech-stack">
+          <span class="tech-badge">Python</span><span class="tech-badge">SerpAPI</span>
+          <span class="tech-badge">Sheety (Google Sheets)</span><span class="tech-badge">Telegram Bot API</span>
+          <span class="tech-badge">GitHub Actions</span>
+        </div>
+      </div>
+
+      <!-- AI Career Chatbot -->
+      <div class="project-card" style="--accent: #2EC4A6;">
+        <div class="project-header">
+          <div>
+            <div class="project-title">AI Career Chatbot</div>
+            <span class="project-badge" style="margin-top:0.4rem;display:inline-block;">This Page ✦</span>
+          </div>
+          <div class="project-links">
+            <button onclick="toggleChat()" class="project-link link-dashboard" style="border:none;cursor:pointer;">Try it ↗</button>
+          </div>
+        </div>
+        <p class="project-summary">
+          An agentic AI assistant embedded in this portfolio that represents me to HR recruiters.
+          It answers questions about my experience, projects, and background — grounded in my actual
+          profile data, not hallucinated answers.
+        </p>
+        <p class="project-what">
+          Built with Gemini 2.5 Flash (main LLM), Groq as a second LLM quality evaluator,
+          ChromaDB RAG over personal documents, SQLite FAQ search, conversation memory,
+          and Pushover agentic notifications when something can't be answered.
+        </p>
+        <div class="project-highlights">
+          <div class="highlight"><div class="highlight-val">RAG</div><div class="highlight-label">ChromaDB over personal docs</div></div>
+          <div class="highlight"><div class="highlight-val">2 LLMs</div><div class="highlight-label">Gemini + Groq evaluator</div></div>
+          <div class="highlight"><div class="highlight-val">SQLite</div><div class="highlight-label">FAQ + conversation memory</div></div>
+          <div class="highlight"><div class="highlight-val">€0</div><div class="highlight-label">Runs on free tiers only</div></div>
+        </div>
+        <div class="tech-stack">
+          <span class="tech-badge">Python</span><span class="tech-badge">FastAPI</span>
+          <span class="tech-badge">Gemini 2.5 Flash</span><span class="tech-badge">Groq</span>
+          <span class="tech-badge">ChromaDB</span><span class="tech-badge">LangChain</span>
+          <span class="tech-badge">SQLite FTS5</span><span class="tech-badge">HuggingFace Spaces</span>
+        </div>
+      </div>
+
+      <!-- Local AI Agent -->
+      <div class="project-card" style="--accent: #9B72CF;">
+        <div class="project-header">
+          <div><div class="project-title">Local AI Agent v2</div></div>
+          <div class="project-links">
+            <a href="https://github.com/ibryam/my-local-ai-agent" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+        <p class="project-summary">
+          A locally-running AI assistant powered by open-source models via Ollama —
+          with 6 agent tools, persistent memory across sessions, and a Streamlit UI.
+          Zero API costs.
+        </p>
+        <p class="project-what">
+          Built with LangGraph for the agent loop and SQLite checkpoint for session memory.
+          Tools include web search, file read/write, directory listing, and PowerShell command execution.
+        </p>
+        <div class="project-highlights">
+          <div class="highlight"><div class="highlight-val">6</div><div class="highlight-label">Agent tools (search, files, shell)</div></div>
+          <div class="highlight"><div class="highlight-val">Local</div><div class="highlight-label">qwen3:8b via Ollama — no API cost</div></div>
+          <div class="highlight"><div class="highlight-val">LangGraph</div><div class="highlight-label">Persistent session memory</div></div>
+          <div class="highlight"><div class="highlight-val">Streamlit</div><div class="highlight-label">Clean web UI</div></div>
+        </div>
+        <div class="tech-stack">
+          <span class="tech-badge">Python</span><span class="tech-badge">Streamlit</span>
+          <span class="tech-badge">Ollama (qwen3:8b)</span><span class="tech-badge">LangChain</span>
+          <span class="tech-badge">LangGraph</span><span class="tech-badge">SQLite</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" style="background: var(--navy-light);">
+  <div class="section-inner">
+    <div class="section-label">Expertise</div>
+    <h2 class="section-title">Technical Skills</h2>
+    <p class="section-desc">From cloud data pipelines to agentic AI systems — the full stack.</p>
+
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-title">Data Engineering</div>
+        <div class="skill-item">dbt Core (data modelling)</div>
+        <div class="skill-item">Google BigQuery</div>
+        <div class="skill-item">SQL (advanced)</div>
+        <div class="skill-item">Pipeline architecture</div>
+        <div class="skill-item">Data quality testing</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">AI & LLM Engineering</div>
+        <div class="skill-item">Gemini / OpenAI / Claude APIs</div>
+        <div class="skill-item">RAG (ChromaDB, LangChain)</div>
+        <div class="skill-item">Agentic tool use</div>
+        <div class="skill-item">LangGraph (agent loops)</div>
+        <div class="skill-item">Prompt engineering</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Programming</div>
+        <div class="skill-item">Python (data + AI pipelines)</div>
+        <div class="skill-item">FastAPI</div>
+        <div class="skill-item">REST API integration</div>
+        <div class="skill-item">Pandas, NumPy, Selenium</div>
+        <div class="skill-item">Git & version control</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Automation & Cloud</div>
+        <div class="skill-item">GitHub Actions (CI/CD)</div>
+        <div class="skill-item">Google Cloud Platform</div>
+        <div class="skill-item">HuggingFace Spaces</div>
+        <div class="skill-item">Cloudflare Pages</div>
+        <div class="skill-item">Scheduled pipelines</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Visualisation & BI</div>
+        <div class="skill-item">Tableau (Desktop + Public)</div>
+        <div class="skill-item">Dashboard design</div>
+        <div class="skill-item">KPI reporting</div>
+        <div class="skill-item">Financial data analysis</div>
+        <div class="skill-item">Alteryx Designer Core ✓</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">Background</div>
+    <h2 class="section-title">About Me</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I am a <strong>Senior Data Analyst at UKG</strong> with over 5 years of experience in data
+          engineering, visualisation, and AI-driven automation. My background spans financial services
+          (Experian) and enterprise software (UKG), giving me strong domain knowledge alongside
+          technical depth.
+        </p>
+        <p>
+          I specialise in <strong>BigQuery, dbt, Tableau, and Python</strong> for data engineering,
+          and increasingly in <strong>LLM-powered tools</strong> — building agentic workflows, RAG systems,
+          and AI pipelines using Gemini, Claude, and open-source models.
+        </p>
+        <p>
+          I am targeting a move to the <strong>DACH region</strong> (Germany, Austria, Switzerland).
+          I have family in Geneva and my uncle lives in Oberstdorf, Germany — relocation logistics are
+          in place. As an EU citizen there are no permit barriers. German B1 expected by June 2026.
+        </p>
+        <div class="about-tags">
+          <span class="about-tag">Tableau 4+ yrs</span>
+          <span class="about-tag">dbt · BigQuery</span>
+          <span class="about-tag">Python · SQL</span>
+          <span class="about-tag">Gemini · Claude APIs</span>
+          <span class="about-tag">Alteryx Certified</span>
+          <span class="about-tag">DACH target</span>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-title">At a Glance</div>
+        <div class="about-card-item"><span>Current role</span><span>Senior Data Analyst · UKG</span></div>
+        <div class="about-card-item"><span>Tableau</span><span>4+ years</span></div>
+        <div class="about-card-item"><span>Stack</span><span>BigQuery · dbt · Python · SQL</span></div>
+        <div class="about-card-item"><span>AI experience</span><span>Gemini · OpenAI · Claude APIs</span></div>
+        <div class="about-card-item"><span>Certification</span><span>Alteryx Designer Core</span></div>
+        <div class="about-card-item"><span>English</span><span>C1/C2</span></div>
+        <div class="about-card-item"><span>German</span><span>A1/A2 · B1 target June 2026</span></div>
+        <div class="about-card-item"><span>Other languages</span><span>Bulgarian (native) · Turkish B2</span></div>
+        <div class="about-card-item"><span>Location goal</span><span>DACH region · EU citizen</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" style="background: var(--navy-light);">
+  <div class="section-inner">
+    <div class="section-label">Career</div>
+    <h2 class="section-title">Experience</h2>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-header">
+            <span class="tl-role">Senior Data Analyst</span>
+            <span class="tl-company">UKG</span>
+            <span class="tl-years">Jul 2022 – Present</span>
+          </div>
+          <p class="tl-desc">Tableau dashboards for operational KPIs; advanced SQL on BigQuery; led AI projects using Gemini, Claude, and OpenAI for automated dataset summarisation.</p>
+          <div class="tl-tools">
+            <span class="tech-badge">Tableau</span><span class="tech-badge">SQL</span>
+            <span class="tech-badge">Python</span><span class="tech-badge">BigQuery</span>
+            <span class="tech-badge">dbt</span><span class="tech-badge">Gemini/Claude APIs</span>
+            <span class="tech-badge">Jira · Confluence</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-header">
+            <span class="tl-role">Financial Analyst</span>
+            <span class="tl-company">Experian</span>
+            <span class="tl-years">Mar 2021 – Jul 2022</span>
+          </div>
+          <p class="tl-desc">Financial reporting and dashboards; budget variance analysis; IFRS15 compliance across multiple data sources.</p>
+          <div class="tl-tools">
+            <span class="tech-badge">Tableau</span><span class="tech-badge">SQL</span>
+            <span class="tech-badge">Excel</span><span class="tech-badge">Oracle DB</span>
+            <span class="tech-badge">Python</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-header">
+            <span class="tl-role">Senior Sales Representative</span>
+            <span class="tl-company">Dell Technologies</span>
+            <span class="tl-years">Mar 2018 – Mar 2021</span>
+          </div>
+          <p class="tl-desc">Enterprise account management, sales forecasting, CRM data tracking and conversion analysis.</p>
+          <div class="tl-tools">
+            <span class="tech-badge">Excel</span><span class="tech-badge">Salesforce</span>
+            <span class="tech-badge">Data Forecasting</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item tl-edu">
+        <div class="tl-dot tl-dot-edu"></div>
+        <div class="tl-content">
+          <div class="tl-header">
+            <span class="tl-role">Master of International Business</span>
+            <span class="tl-company">University of Economics · Varna</span>
+            <span class="tl-years">2014 – 2015</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item tl-edu">
+        <div class="tl-dot tl-dot-edu"></div>
+        <div class="tl-content">
+          <div class="tl-header">
+            <span class="tl-role">Bachelor of Economics &amp; Tourism</span>
+            <span class="tl-company">University of Economics · Varna</span>
+            <span class="tl-years">2010 – 2014</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="https://www.linkedin.com/in/ibryam" target="_blank">LinkedIn</a>
+    <a href="https://github.com/ibryam" target="_blank">GitHub</a>
+    <a href="https://public.tableau.com/app/profile/ibryam" target="_blank">Tableau Public</a>
+    <a href="mailto:ibryamfibryam@gmail.com">ibryamfibryam@gmail.com</a>
+  </div>
+  <p class="footer-copy">Ibryam Faik · Data &amp; AI Engineer · Hosted on Cloudflare Pages</p>
+</footer>
+
+<!-- ── CHAT WIDGET ── -->
+<button id="chat-toggle" onclick="toggleChat()" title="Ask about Ibryam">💬</button>
+
+<div id="chat-panel">
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <span class="chat-header-name">Ask about Ibryam</span>
+      <span class="chat-header-sub">AI assistant · answers about career, projects &amp; skills</span>
+    </div>
+    <button class="chat-header-close" onclick="toggleChat()" title="Close">✕</button>
+  </div>
+  <div id="chat-messages">
+    <div class="chat-msg chat-msg-bot">
+      Hi! I'm Ibryam's AI assistant. Ask me anything about his experience, projects, skills, or career goals. 👋
+    </div>
+    <div class="chat-suggestions">
+      <span class="chat-suggestion" onclick="sendSuggestion(this)">What's your BigQuery experience?</span>
+      <span class="chat-suggestion" onclick="sendSuggestion(this)">Tell me about the AI projects</span>
+      <span class="chat-suggestion" onclick="sendSuggestion(this)">Are you open to relocation?</span>
+      <span class="chat-suggestion" onclick="sendSuggestion(this)">What's your notice period?</span>
+    </div>
+  </div>
+  <div id="chat-input-bar">
+    <input id="chat-input" type="text" placeholder="Ask about experience, projects, skills…" />
+    <button id="chat-send" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<script>
+  // ── Config — update BACKEND_URL before deploying ──────────────────────────
+  var BACKEND_URL = 'http://localhost:8000';
+  var sessionId = '';
+  var isOpen = false;
+  var isLoading = false;
+
+  // ── Chat panel toggle ──────────────────────────────────────────────────────
+  function toggleChat() {
+    isOpen = !isOpen;
+    var panel = document.getElementById('chat-panel');
+    panel.classList.toggle('open', isOpen);
+    if (isOpen) {
+      document.getElementById('chat-input').focus();
+      scrollMessages();
+    }
+  }
+
+  // ── Send a suggestion pill ─────────────────────────────────────────────────
+  function sendSuggestion(el) {
+    document.getElementById('chat-input').value = el.textContent;
+    sendMessage();
+  }
+
+  // ── Core send ─────────────────────────────────────────────────────────────
+  function sendMessage() {
+    var input = document.getElementById('chat-input');
+    var text = (input.value || '').trim();
+    if (!text || isLoading) return;
+
+    input.value = '';
+    appendMessage('user', text);
+    showTyping();
+    isLoading = true;
+    document.getElementById('chat-send').disabled = true;
+
+    fetch(BACKEND_URL + '/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message: text, session_id: sessionId})
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      sessionId = data.session_id || sessionId;
+      removeTyping();
+      appendMessage('bot', data.reply || 'Sorry, I had trouble with that response.');
+    })
+    .catch(function() {
+      removeTyping();
+      appendMessage('bot', 'Something went wrong connecting to the backend. Please try again in a moment.');
+    })
+    .finally(function() {
+      isLoading = false;
+      document.getElementById('chat-send').disabled = false;
+      document.getElementById('chat-input').focus();
+    });
+  }
+
+  // ── Message rendering ─────────────────────────────────────────────────────
+  function appendMessage(role, text) {
+    var msgs = document.getElementById('chat-messages');
+    var div = document.createElement('div');
+    div.className = 'chat-msg ' + (role === 'user' ? 'chat-msg-user' : 'chat-msg-bot');
+    div.textContent = text;
+    msgs.appendChild(div);
+    scrollMessages();
+  }
+
+  function showTyping() {
+    var msgs = document.getElementById('chat-messages');
+    var div = document.createElement('div');
+    div.className = 'chat-msg-typing';
+    div.id = 'typing-indicator';
+    div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+    msgs.appendChild(div);
+    scrollMessages();
+  }
+
+  function removeTyping() {
+    var el = document.getElementById('typing-indicator');
+    if (el) el.remove();
+  }
+
+  function scrollMessages() {
+    var msgs = document.getElementById('chat-messages');
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  // ── Keyboard: Enter to send ───────────────────────────────────────────────
+  document.getElementById('chat-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  // ── Tableau viz scaling ───────────────────────────────────────────────────
+  var VIZZES = [
+    {cId:'container-swiss', sId:'scaler-swiss', w:1200, h:867},
+    {cId:'container-smi',   sId:'scaler-smi',   w:900,  h:967}
+  ];
+  function scaleAll() {
+    VIZZES.forEach(function(v) {
+      var c = document.getElementById(v.cId);
+      var s = document.getElementById(v.sId);
+      if (!c || !s) return;
+      var scale = c.offsetWidth / v.w;
+      s.style.transform = 'scale(' + scale + ')';
+      c.style.height = (v.h * scale) + 'px';
+    });
+  }
+  window.addEventListener('resize', scaleAll);
+  document.addEventListener('DOMContentLoaded', function() { scaleAll(); setTimeout(scaleAll, 800); });
+</script>
+</body>
+</html>
