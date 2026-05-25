@@ -75,19 +75,20 @@ Key features:
 
 ## 5. AI Career Chatbot (ibryam.com)
 **Type:** Agentic AI chatbot embedded in personal portfolio
-**Tech:** Python, FastAPI, Gemini 2.5 Flash, Groq (llama-3.3-70b), ChromaDB, LangChain, SQLite, Pushover, HuggingFace Spaces, Cloudflare Pages
+**Tech:** Python, FastAPI, OpenAI gpt-4o-mini, Gemini 2.0 Flash (evaluator), Groq llama-3.1-8b-instant (evaluator fallback), ChromaDB, LangChain, SQLite, Telegram Bot API, HuggingFace Spaces, Cloudflare Workers
 
 A personal AI assistant that represents Ibryam on his portfolio website. HR recruiters can ask questions about his experience, projects, skills, and background, and get accurate, grounded answers.
 
 Key features:
 - RAG (Retrieval-Augmented Generation) over personal documents — answers are grounded in actual profile data
-- FAQ SQLite database with full-text search — structured answers to common HR questions
+- FAQ SQLite database with FTS5 full-text search — structured answers to common HR questions
 - Conversation memory — remembers context within a session
-- Groq evaluator (llama-3.3-70b) as second LLM quality gate — APPROVED/REJECTED decision per response
-- Agentic Pushover notifications — alerts Ibryam when a question can't be answered or a recruiter shares their email
+- Dual-LLM evaluator: Gemini 2.0 Flash as primary, Groq llama-3.1-8b-instant as fallback — APPROVED/REJECTED quality gate per response
+- Telegram Bot notifications — alerts Ibryam when a recruiter shares their email or asks an unanswered question
 - Agent tools: record_user_details, record_unknown_question, faq_lookup, get_session_context
+- Unknown questions persisted to SQLite for review and continuous knowledge base improvement
 - Custom floating chat widget matching the portfolio's navy/teal design
-- Deployed free: HuggingFace Spaces (backend) + Cloudflare Pages (frontend)
+- Deployed entirely free: HuggingFace Spaces Docker (backend) + Cloudflare Workers (frontend)
 
 ---
 
