@@ -336,10 +336,10 @@
 <!-- STATS BAR -->
 <div class="stats">
   <div class="stats-inner">
-    <div><div class="stat-num">5+</div><div class="stat-label">Years in Data</div></div>
-    <div><div class="stat-num">7</div><div class="stat-label">Personal Projects</div></div>
-    <div><div class="stat-num">4</div><div class="stat-label">AI / LLM Projects</div></div>
+    <div><div class="stat-num">5+</div><div class="stat-label">Years Experience</div></div>
+    <div><div class="stat-num">2</div><div class="stat-label">Live Dashboards</div></div>
     <div><div class="stat-num">27+</div><div class="stat-label">Automated Data Tests</div></div>
+    <div><div class="stat-num">3</div><div class="stat-label">Data Sources per Project</div></div>
     <div><div class="stat-num">0 CHF</div><div class="stat-label">Infrastructure Cost</div></div>
   </div>
 </div>
@@ -348,10 +348,10 @@
 <section id="projects">
   <div class="section-inner">
     <div class="section-label">Portfolio</div>
-    <h2 class="section-title">End-to-End Projects</h2>
+    <h2 class="section-title">End-to-End Data Projects</h2>
     <p class="section-desc">
-      From automated data pipelines and live dashboards to multi-agent AI systems —
-      all fully automated, all source code public on GitHub.
+      Each project is fully automated — data is collected, processed, tested, and published without manual steps.
+      All source code is public on GitHub.
     </p>
 
     <div class="projects-grid">
@@ -432,134 +432,6 @@
         </div>
       </div>
 
-      <!-- ATS Skipper -->
-      <div class="project-card" style="--accent: #E8A838;">
-        <div class="project-header">
-          <div>
-            <div class="project-title">ATS Skipper v2</div>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/ibryam/ats-skipper" target="_blank" class="project-link link-dashboard" style="background:#E8A838;">GitHub ↗</a>
-          </div>
-        </div>
-        <p class="project-summary">
-          A multi-agent job application system that scrapes 4 job boards, scores each role
-          across 8 weighted dimensions using Gemini AI, and auto-generates tailored CVs
-          and cover letters as .docx files — ready to submit.
-        </p>
-        <p class="project-what">
-          Scrapes LinkedIn, jobs.ch, jobscout24.ch, and xing.com. Scores matches from A+ to F.
-          Generates bespoke CV + cover letter per application (German JD → German letter).
-          Tracks everything in a 20-column CSV pipeline with Pushover notifications.
-        </p>
-        <div class="project-highlights">
-          <div class="highlight"><div class="highlight-val">4</div><div class="highlight-label">Job boards scraped</div></div>
-          <div class="highlight"><div class="highlight-val">8</div><div class="highlight-label">Scoring dimensions (A+ to F)</div></div>
-          <div class="highlight"><div class="highlight-val">Multi-LLM</div><div class="highlight-label">Gemini primary · Groq fallback</div></div>
-          <div class="highlight"><div class="highlight-val">Auto</div><div class="highlight-label">CV + cover letter per job</div></div>
-        </div>
-        <div class="tech-stack">
-          <span class="tech-badge">Python</span><span class="tech-badge">Gemini 2.5 Flash</span>
-          <span class="tech-badge">Groq (llama-3.3-70b)</span><span class="tech-badge">Selenium</span>
-          <span class="tech-badge">python-docx</span><span class="tech-badge">Multi-agent</span>
-        </div>
-      </div>
-
-      <!-- Flight Deals -->
-      <div class="project-card" style="--accent: #5B9BD5;">
-        <div class="project-header">
-          <div><div class="project-title">Flight Deals Finder</div></div>
-          <div class="project-links">
-            <a href="https://github.com/ibryam/flight-deals" target="_blank" class="project-link link-dashboard" style="background:#5B9BD5;">GitHub ↗</a>
-          </div>
-        </div>
-        <p class="project-summary">
-          A fully automated weekly flight price monitor that scans configured routes,
-          compares against per-destination thresholds, and sends instant Telegram alerts
-          when a deal drops below your target — no server required.
-        </p>
-        <p class="project-what">
-          Runs every Monday 6am UTC via GitHub Actions. Reads origins and destinations from
-          a Google Sheet. Searches SerpAPI for prices, then fires a Telegram message with
-          airline, price, and Google Flights link.
-        </p>
-        <div class="project-highlights">
-          <div class="highlight"><div class="highlight-val">Weekly</div><div class="highlight-label">Automated via GitHub Actions</div></div>
-          <div class="highlight"><div class="highlight-val">Google Sheet</div><div class="highlight-label">No-code config for routes</div></div>
-          <div class="highlight"><div class="highlight-val">Telegram</div><div class="highlight-label">Instant deal alerts</div></div>
-          <div class="highlight"><div class="highlight-val">€0</div><div class="highlight-label">Running cost (free tier APIs)</div></div>
-        </div>
-        <div class="tech-stack">
-          <span class="tech-badge">Python</span><span class="tech-badge">SerpAPI</span>
-          <span class="tech-badge">Sheety (Google Sheets)</span><span class="tech-badge">Telegram Bot API</span>
-          <span class="tech-badge">GitHub Actions</span>
-        </div>
-      </div>
-
-      <!-- AI Career Chatbot -->
-      <div class="project-card" style="--accent: #2EC4A6;">
-        <div class="project-header">
-          <div>
-            <div class="project-title">AI Career Chatbot</div>
-            <span class="project-badge" style="margin-top:0.4rem;display:inline-block;">This Page ✦</span>
-          </div>
-          <div class="project-links">
-            <button onclick="toggleChat()" class="project-link link-dashboard" style="border:none;cursor:pointer;">Try it ↗</button>
-          </div>
-        </div>
-        <p class="project-summary">
-          An agentic AI assistant embedded in this portfolio that represents me to HR recruiters.
-          It answers questions about my experience, projects, and background — grounded in my actual
-          profile data, not hallucinated answers.
-        </p>
-        <p class="project-what">
-          Built with Gemini 2.5 Flash (main LLM), Groq as a second LLM quality evaluator,
-          ChromaDB RAG over personal documents, SQLite FAQ search, conversation memory,
-          and Pushover agentic notifications when something can't be answered.
-        </p>
-        <div class="project-highlights">
-          <div class="highlight"><div class="highlight-val">RAG</div><div class="highlight-label">ChromaDB over personal docs</div></div>
-          <div class="highlight"><div class="highlight-val">2 LLMs</div><div class="highlight-label">Gemini + Groq evaluator</div></div>
-          <div class="highlight"><div class="highlight-val">SQLite</div><div class="highlight-label">FAQ + conversation memory</div></div>
-          <div class="highlight"><div class="highlight-val">€0</div><div class="highlight-label">Runs on free tiers only</div></div>
-        </div>
-        <div class="tech-stack">
-          <span class="tech-badge">Python</span><span class="tech-badge">FastAPI</span>
-          <span class="tech-badge">Gemini 2.5 Flash</span><span class="tech-badge">Groq</span>
-          <span class="tech-badge">ChromaDB</span><span class="tech-badge">LangChain</span>
-          <span class="tech-badge">SQLite FTS5</span><span class="tech-badge">HuggingFace Spaces</span>
-        </div>
-      </div>
-
-      <!-- Local AI Agent -->
-      <div class="project-card" style="--accent: #9B72CF;">
-        <div class="project-header">
-          <div><div class="project-title">Local AI Agent v2</div></div>
-          <div class="project-links">
-            <a href="https://github.com/ibryam/my-local-ai-agent" target="_blank" class="project-link link-github">GitHub</a>
-          </div>
-        </div>
-        <p class="project-summary">
-          A locally-running AI assistant powered by open-source models via Ollama —
-          with 6 agent tools, persistent memory across sessions, and a Streamlit UI.
-          Zero API costs.
-        </p>
-        <p class="project-what">
-          Built with LangGraph for the agent loop and SQLite checkpoint for session memory.
-          Tools include web search, file read/write, directory listing, and PowerShell command execution.
-        </p>
-        <div class="project-highlights">
-          <div class="highlight"><div class="highlight-val">6</div><div class="highlight-label">Agent tools (search, files, shell)</div></div>
-          <div class="highlight"><div class="highlight-val">Local</div><div class="highlight-label">qwen3:8b via Ollama — no API cost</div></div>
-          <div class="highlight"><div class="highlight-val">LangGraph</div><div class="highlight-label">Persistent session memory</div></div>
-          <div class="highlight"><div class="highlight-val">Streamlit</div><div class="highlight-label">Clean web UI</div></div>
-        </div>
-        <div class="tech-stack">
-          <span class="tech-badge">Python</span><span class="tech-badge">Streamlit</span>
-          <span class="tech-badge">Ollama (qwen3:8b)</span><span class="tech-badge">LangChain</span>
-          <span class="tech-badge">LangGraph</span><span class="tech-badge">SQLite</span>
-        </div>
-      </div>
 
     </div>
   </div>
