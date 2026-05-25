@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from openai import OpenAI, RateLimitError
+from openai import OpenAI
 
 from memory import save_message, get_recent_history
 from rag import retrieve_context
@@ -11,58 +11,44 @@ from tools import TOOL_SCHEMAS, dispatch_tool
 
 load_dotenv(override=True)
 
-# Gemini via OpenAI-compatible endpoint (proven pattern from the course)
-_client = OpenAI(
-    api_key=os.getenv("GOOGLE_API_KEY"),
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-)
+_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+MODEL = os.getenv("AGENT_MODEL", "gpt-4o-mini")
 MAX_TOOL_ROUNDS = 5
 
-# ── Load knowledge base once at startup ──────────────────────────────────────
-
-def _load_knowledge_base() -> str:
-    kb_dir = Path(__file__).parent / "knowledge_base"
-    texts = []
-    for md_file in sorted(kb_dir.glob("*.md")):
-        texts.append(f"## {md_file.stem.upper()}\n{md_file.read_text(encoding='utf-8')}")
-    return "\n\n---\n\n".join(texts)
-
-
-_STATIC_PROFILE = _load_knowledge_base()
-
-# ── OpenAI function-call tool format ─────────────────────────────────────────
-
 _TOOLS = [{"type": "function", "function": schema} for schema in TOOL_SCHEMAS]
+
+
+# ── Load profile once at startup ──────────────────────────────────────────────
+
+def _load_profile() -> str:
+    profile_path = Path(__file__).parent / "knowledge_base" / "profile.md"
+    return profile_path.read_text(encoding="utf-8") if profile_path.exists() else ""
+
+
+_PROFILE = _load_profile()
 
 
 # ── System prompt ─────────────────────────────────────────────────────────────
 
 def _build_system_prompt(rag_chunks: list[str]) -> str:
-    rag_section = ""
+    context = ""
     if rag_chunks:
-        joined = "\n\n".join(f"[Excerpt {i+1}]\n{c}" for i, c in enumerate(rag_chunks))
-        rag_section = f"\n\n## MOST RELEVANT CONTEXT FOR THIS QUESTION\n{joined}"
+        joined = "\n\n".join(f"[{i+1}] {c}" for i, c in enumerate(rag_chunks))
+        context = f"\n\n## RELEVANT CONTEXT FOR THIS QUESTION\n{joined}"
 
     return (
-        "You are acting as Ibryam Faik, a Senior Data Analyst and Data Engineer. "
-        "You are answering questions on Ibryam's personal portfolio website (ibryam.com). "
-        "Visitors are typically HR recruiters, hiring managers, or data professionals "
-        "who want to learn about his background, skills, projects, and career goals.\n\n"
-        "Your responsibilities:\n"
-        "- Answer all questions about Ibryam's career, technical skills, projects, and background "
-        "faithfully and accurately using the profile data below.\n"
-        "- Be professional, warm, and engaging — you are speaking on his behalf.\n"
-        "- If a recruiter shares their email or expresses interest in contact, use record_user_details.\n"
-        "- If you cannot answer a question from the provided profile, use record_unknown_question "
-        "AND tell the user you'll pass it to Ibryam directly.\n"
-        "- Use faq_lookup for questions about salary, notice period, availability, relocation, "
-        "or anything that may have a prepared answer.\n"
-        "- Keep responses concise (3-5 sentences) unless detail is clearly needed.\n"
-        "- Never invent facts not present in the profile data.\n\n"
-        f"## IBRYAM'S FULL PROFILE\n{_STATIC_PROFILE}"
-        f"{rag_section}"
+        "You are acting as Ibryam Faik on his personal portfolio website ibryam.com. "
+        "Visitors are HR recruiters, hiring managers, and data professionals.\n\n"
+        "IMPORTANT TOOL RULES — follow these before responding:\n"
+        "1. Questions about notice period, salary, availability, relocation, or start date: "
+        "you MUST call faq_lookup before answering. Do not guess — look it up first.\n"
+        "2. Visitor shares an email address: you MUST call record_user_details immediately.\n"
+        "3. You cannot answer from the profile data: you MUST call record_unknown_question, "
+        "then tell the visitor Ibryam will follow up. Never make up facts.\n"
+        "4. Keep answers concise (3-5 sentences). Be professional and warm.\n\n"
+        f"## IBRYAM'S PROFILE\n{_PROFILE}"
+        f"{context}"
     )
 
 
@@ -111,7 +97,8 @@ def chat(message: str, session_id: str, history: list[dict] | None = None) -> st
                 save_message(session_id, "assistant", final_text)
                 return final_text
 
-    except RateLimitError:
-        return "I'm temporarily busy — please try again in a moment."
+    except Exception as e:
+        print(f"[agent] error: {e}")
+        return "I ran into an issue — please try again in a moment."
 
     return "I ran into an issue generating a response. Please try again."
