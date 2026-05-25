@@ -43,6 +43,14 @@ def init_db() -> None:
                 notes      TEXT,
                 ts         DATETIME DEFAULT CURRENT_TIMESTAMP
             );
+
+            CREATE TABLE IF NOT EXISTS unknown_questions (
+                id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT,
+                question   TEXT NOT NULL,
+                answered   INTEGER DEFAULT 0,
+                ts         DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
         """)
     _seed_faq(conn)
     conn.close()
@@ -115,6 +123,36 @@ def search_faq(query: str, limit: int = 3) -> list[dict]:
     ).fetchall()
     conn.close()
     return [{"question": r["question"], "answer": r["answer"]} for r in rows]
+
+
+# ── Unknown questions ────────────────────────────────────────────────────────
+
+def save_unknown_question(question: str, session_id: str = "") -> None:
+    conn = get_connection()
+    with conn:
+        conn.execute(
+            "INSERT INTO unknown_questions (session_id, question) VALUES (?, ?)",
+            (session_id, question),
+        )
+    conn.close()
+
+
+def get_unknown_questions(unanswered_only: bool = False) -> list[dict]:
+    conn = get_connection()
+    sql = "SELECT id, session_id, question, answered, ts FROM unknown_questions"
+    if unanswered_only:
+        sql += " WHERE answered = 0"
+    sql += " ORDER BY ts DESC"
+    rows = conn.execute(sql).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def mark_question_answered(question_id: int) -> None:
+    conn = get_connection()
+    with conn:
+        conn.execute("UPDATE unknown_questions SET answered = 1 WHERE id = ?", (question_id,))
+    conn.close()
 
 
 # ── Lead recording ───────────────────────────────────────────────────────────

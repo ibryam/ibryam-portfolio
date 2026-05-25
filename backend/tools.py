@@ -2,7 +2,7 @@ import json
 import os
 import requests
 from dotenv import load_dotenv
-from memory import save_lead, search_faq, get_recent_history
+from memory import save_lead, search_faq, get_recent_history, save_unknown_question
 
 load_dotenv(override=True)
 
@@ -31,16 +31,19 @@ def _telegram(title: str, message: str) -> None:
 # ── Tool functions ────────────────────────────────────────────────────────────
 
 def record_user_details(email: str, name: str = "not provided", notes: str = "not provided", session_id: str = "") -> dict:
+    print(f"[tool] record_user_details — name={name} email={email}")
     save_lead(session_id=session_id, email=email, name=name, notes=notes)
-    _pushover(
+    _telegram(
         "ibryam.com — New Contact",
         f"Name: {name}\nEmail: {email}\nNotes: {notes}",
     )
     return {"recorded": True, "message": "Thank you, Ibryam will be in touch soon."}
 
 
-def record_unknown_question(question: str) -> dict:
-    _pushover("ibryam.com — Unknown Question", question)
+def record_unknown_question(question: str, session_id: str = "") -> dict:
+    print(f"[tool] record_unknown_question — {question[:80]}")
+    save_unknown_question(question=question, session_id=session_id)
+    _telegram("ibryam.com — Unknown Question", question)
     return {"recorded": True}
 
 
@@ -90,6 +93,7 @@ TOOL_SCHEMAS = [
             "type": "object",
             "properties": {
                 "question": {"type": "string", "description": "The question that could not be answered"},
+                "session_id": {"type": "string", "description": "The current session identifier"},
             },
             "required": ["question"],
         },

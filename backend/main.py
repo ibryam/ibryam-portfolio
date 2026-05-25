@@ -10,7 +10,7 @@ load_dotenv(override=True)
 
 from agent import chat as agent_chat
 from evaluator import evaluate
-from memory import init_db, get_recent_history
+from memory import init_db, get_unknown_questions, mark_question_answered
 from rag import init_rag
 
 
@@ -59,6 +59,17 @@ async def health():
     return {"status": "ok"}
 
 
+@app.get("/admin/unknown-questions")
+async def unknown_questions(unanswered_only: bool = True):
+    return {"questions": get_unknown_questions(unanswered_only=unanswered_only)}
+
+
+@app.post("/admin/unknown-questions/{question_id}/answered")
+async def mark_answered(question_id: int):
+    mark_question_answered(question_id)
+    return {"marked": True, "id": question_id}
+
+
 @app.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
     if not req.message.strip():
@@ -66,38 +77,18 @@ async def chat(req: ChatRequest):
 
     session_id = req.session_id or str(uuid.uuid4())
 
-    # Retrieve RAG context for the evaluator (agent does its own retrieval internally)
-    from rag import retrieve_context
-    rag_chunks = retrieve_context(req.message)
-
-    # First attempt
     reply = agent_chat(
         message=req.message,
         session_id=session_id,
         history=req.history,
     )
 
-    # Evaluate the response
+    # Evaluate in background for logging — never blocks or retries (saves API quota)
+    from rag import retrieve_context
+    rag_chunks = retrieve_context(req.message)
     verdict = evaluate(req.message, rag_chunks, reply)
-
-    # If rejected, try once more with a hint
     if verdict["decision"] == "REJECTED":
-        print(f"[eval] REJECTED ({verdict['confidence']}%) — {verdict['reason']} — retrying")
-        hint_history = get_recent_history(session_id, limit=8)
-        hint_history.append({
-            "role": "user",
-            "content": (
-                f"[INTERNAL NOTE: Your previous response was flagged as inaccurate by "
-                f"the quality evaluator: {verdict['reason']}. "
-                f"Please answer again more carefully, sticking strictly to the profile data.]"
-            ),
-        })
-        reply = agent_chat(
-            message=req.message,
-            session_id=session_id,
-            history=hint_history,
-        )
-        verdict = evaluate(req.message, rag_chunks, reply)
+        print(f"[eval] REJECTED ({verdict['confidence']}%) — {verdict['reason']}")
 
     return ChatResponse(
         reply=reply,

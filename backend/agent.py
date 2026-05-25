@@ -81,7 +81,7 @@ def chat(message: str, session_id: str, history: list[dict] | None = None) -> st
 
                 for tc in tool_calls:
                     args = json.loads(tc.function.arguments)
-                    if tc.function.name in ("record_user_details", "get_session_context"):
+                    if tc.function.name in ("record_user_details", "get_session_context", "record_unknown_question"):
                         args.setdefault("session_id", session_id)
                     result = dispatch_tool(tc.function.name, args)
                     messages.append({
