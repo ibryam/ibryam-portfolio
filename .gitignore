@@ -1,0 +1,24 @@
+# Local Claude overrides — machine-specific, never shared
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Secrets
+.env
+.env.local
+*.key
+*.pem
+
+# Audit log from hooks
+.claude/audit.log
+
+# Task working files (optional — commit todo.md if you want shared tracking)
+# tasks/todo.md
+
+# Project-specific
+backend/vector_store/
+backend/me/linkedin.pdf
+*.db
+__pycache__/
+*.pyc
+.venv/
+backend/requirements.txt
