@@ -249,9 +249,22 @@
     }
     .chat-suggestion:hover { background: rgba(46,196,166,0.2); }
 
+    #chat-jd-cta {
+      padding: 0.5rem 0.75rem 0;
+      background: #0f1e38;
+    }
+    #chat-jd-btn {
+      width: 100%; padding: 0.45rem 0.75rem;
+      background: rgba(46,196,166,0.08); border: 1px dashed rgba(46,196,166,0.35);
+      border-radius: 8px; color: var(--teal); font-size: 0.78rem;
+      cursor: pointer; text-align: left; transition: background 0.15s;
+      font-family: inherit;
+    }
+    #chat-jd-btn:hover { background: rgba(46,196,166,0.16); }
+
     #chat-input-bar {
-      padding: 0.75rem; border-top: 1px solid rgba(46,196,166,0.15);
-      display: flex; gap: 0.5rem; align-items: center;
+      padding: 0.6rem 0.75rem 0.75rem; border-top: 1px solid rgba(46,196,166,0.15);
+      display: flex; gap: 0.5rem; align-items: flex-end;
       background: #0f1e38;
     }
     #chat-input {
@@ -259,7 +272,8 @@
       border: 1px solid var(--border); border-radius: 10px;
       padding: 0.55rem 0.85rem; font-size: 0.88rem;
       outline: none; transition: border-color 0.2s;
-      font-family: inherit;
+      font-family: inherit; resize: none; overflow-y: auto;
+      min-height: 38px; max-height: 140px; line-height: 1.4;
     }
     #chat-input:focus { border-color: var(--teal); }
     #chat-input::placeholder { color: var(--muted); }
@@ -653,8 +667,11 @@
       <span class="chat-suggestion" onclick="sendSuggestion(this)">What's your notice period?</span>
     </div>
   </div>
+  <div id="chat-jd-cta">
+    <button id="chat-jd-btn" onclick="triggerJDMatch()">📋 Paste a job description — see how well Ibryam matches the role</button>
+  </div>
   <div id="chat-input-bar">
-    <input id="chat-input" type="text" placeholder="Ask about experience, projects, skills…" />
+    <textarea id="chat-input" rows="1" placeholder="Ask about experience, projects, skills…"></textarea>
     <button id="chat-send" onclick="sendMessage()">➤</button>
   </div>
 </div>
@@ -767,10 +784,26 @@
     msgs.scrollTop = msgs.scrollHeight;
   }
 
-  // ── Keyboard: Enter to send ───────────────────────────────────────────────
-  document.getElementById('chat-input').addEventListener('keydown', function(e) {
+  // ── Textarea: Enter = send, Shift+Enter = newline, auto-resize ───────────
+  var chatInput = document.getElementById('chat-input');
+  chatInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   });
+  chatInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+  });
+
+  // ── JD match CTA ─────────────────────────────────────────────────────────
+  function triggerJDMatch() {
+    var input = document.getElementById('chat-input');
+    input.value = 'Here is a job description. How well does Ibryam match this role?\n\n';
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+    if (!isOpen) toggleChat();
+  }
 
   // ── Tableau viz scaling ───────────────────────────────────────────────────
   var VIZZES = [
