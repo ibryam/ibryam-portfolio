@@ -1,5 +1,6 @@
 import json
 import os
+import queue
 import threading
 import requests
 from dotenv import load_dotenv
@@ -37,23 +38,42 @@ def _telegram(title: str, message: str) -> None:
     print(f"[telegram] gave up after 2 attempts — {title}")
 
 
+# ── Persistent notification queue (one worker thread, lives for process lifetime) ──
+
+_notif_queue: queue.Queue = queue.Queue()
+
+
+def _notif_worker():
+    while True:
+        title, msg = _notif_queue.get()
+        try:
+            _telegram(title, msg)
+        except Exception as e:
+            print(f"[notif-worker] error: {e}")
+        _notif_queue.task_done()
+
+
+threading.Thread(target=_notif_worker, daemon=True).start()
+
+
+def _notify(title: str, message: str) -> None:
+    """Queue a Telegram notification — returns instantly, never blocks a request."""
+    _notif_queue.put((title, message))
+
+
 # ── Tool functions ────────────────────────────────────────────────────────────
-
-def _telegram_bg(title: str, message: str) -> None:
-    threading.Thread(target=_telegram, args=(title, message), daemon=True).start()
-
 
 def record_user_details(email: str, name: str = "not provided", notes: str = "not provided", session_id: str = "") -> dict:
     print(f"[tool] record_user_details — name={name} email={email}")
     save_lead(session_id=session_id, email=email, name=name, notes=notes)
-    _telegram_bg("ibryam.com — New Contact", f"Name: {name}\nEmail: {email}\nNotes: {notes}")
+    _notify("ibryam.com — New Contact", f"Name: {name}\nEmail: {email}\nNotes: {notes}")
     return {"recorded": True, "message": "Thank you, Ibryam will be in touch soon."}
 
 
 def record_unknown_question(question: str, session_id: str = "") -> dict:
     print(f"[tool] record_unknown_question — {question[:80]}")
     save_unknown_question(question=question, session_id=session_id)
-    _telegram("ibryam.com — Unknown Question", question)
+    _notify("ibryam.com — Unknown Question", question)
     return {"recorded": True}
 
 
