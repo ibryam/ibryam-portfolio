@@ -15,6 +15,7 @@ _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 MODEL = os.getenv("AGENT_MODEL", "gpt-4o-mini")
 MAX_TOOL_ROUNDS = 5
+SHOW_PLAN = os.getenv("SHOW_PLAN", "false").lower() == "true"
 
 _TOOLS = [{"type": "function", "function": schema} for schema in TOOL_SCHEMAS]
 
@@ -53,11 +54,21 @@ def _build_system_prompt(rag_chunks: list[str]) -> str:
         "- Visitor shares an email: call record_user_details immediately.\n"
         "- Question you cannot answer from the profile or context below: "
         "call record_unknown_question, then tell the visitor Ibryam will follow up.\n"
-        "- Use faq_lookup for any unusual HR question not covered below.\n"
-        "- Keep answers concise (3-5 sentences). Be professional and warm.\n\n"
+        "- Use faq_lookup for any unusual HR question not covered below.\n\n"
+        "RESPONSE STYLE:\n"
+        "- Be genuine and conversational, not corporate or robotic.\n"
+        "- Vary your language and sentence structure — don't start responses the same way each time.\n"
+        "- Keep answers focused and concise. Avoid padding or filler phrases.\n"
+        "- You are representing a real person — let some personality come through.\n\n"
         f"{_FAQ_INLINE}\n\n"
         f"## IBRYAM'S PROFILE\n{_PROFILE}"
         f"{context}"
+        + (
+            "\n\nPLAN MODE: Before answering, briefly outline your steps as a numbered list "
+            "prefixed with '**Plan:**'. After answering, show the completed plan with each step "
+            "formatted as ~~step~~ to indicate it is done. Keep the plan short (2-4 steps max)."
+            if SHOW_PLAN else ""
+        )
     )
 
 

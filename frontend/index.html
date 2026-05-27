@@ -644,9 +644,7 @@
     <button class="chat-header-close" onclick="toggleChat()" title="Close">✕</button>
   </div>
   <div id="chat-messages">
-    <div class="chat-msg chat-msg-bot">
-      Hi! I'm Ibryam's AI assistant. Ask me anything about his experience, projects, skills, or career goals. 👋
-    </div>
+    <div class="chat-msg chat-msg-bot" id="greeting-msg"></div>
     <div class="chat-suggestions">
       <span class="chat-suggestion" onclick="sendSuggestion(this)">What's your BigQuery experience?</span>
       <span class="chat-suggestion" onclick="sendSuggestion(this)">Tell me about the AI projects</span>
@@ -661,11 +659,22 @@
 </div>
 
 <script>
-  // ── Config — update BACKEND_URL before deploying ──────────────────────────
+  // ── Config ────────────────────────────────────────────────────────────────
   var BACKEND_URL = 'https://ibryam-ibryam-chatbot.hf.space';
   var sessionId = '';
   var isOpen = false;
   var isLoading = false;
+
+  // ── Greeting rotation ─────────────────────────────────────────────────────
+  var GREETINGS = [
+    "Hey! I'm Ibryam's AI assistant. What would you like to know about his background or projects?",
+    "Hi there — I can answer questions about Ibryam's experience, skills, and availability. What's on your mind?",
+    "Hello! Feel free to ask me anything about Ibryam — his tech stack, work history, or career goals.",
+    "Hi! I'm here to tell you about Ibryam. Ask me about his data engineering work, AI projects, or anything else."
+  ];
+  document.getElementById('greeting-msg').innerHTML = renderMarkdown(
+    GREETINGS[Math.floor(Math.random() * GREETINGS.length)]
+  );
 
   // ── Chat panel toggle ──────────────────────────────────────────────────────
   function toggleChat() {
@@ -718,12 +727,21 @@
     });
   }
 
+  // ── Markdown renderer (bold, strikethrough, line breaks only) ────────────
+  function renderMarkdown(text) {
+    return text
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/~~(.*?)~~/g, '<s>$1</s>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+  }
+
   // ── Message rendering ─────────────────────────────────────────────────────
   function appendMessage(role, text) {
     var msgs = document.getElementById('chat-messages');
     var div = document.createElement('div');
     div.className = 'chat-msg ' + (role === 'user' ? 'chat-msg-user' : 'chat-msg-bot');
-    div.textContent = text;
+    div.innerHTML = renderMarkdown(text);
     msgs.appendChild(div);
     scrollMessages();
   }
