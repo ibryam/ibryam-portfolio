@@ -1,0 +1,8 @@
+{
+  "name": "ibryam-portfolio",
+  "compatibility_date": "2026-05-27",
+  "assets": {
+    "directory": "frontend"
+  },
+  "compatibility_flags": ["nodejs_compat"]
+}
