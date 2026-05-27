@@ -19,11 +19,15 @@ def _telegram(title: str, message: str) -> None:
         return
     text = f"<b>{title}</b>\n{message}"
     try:
-        requests.post(
+        r = requests.post(
             url=f"{_TELEGRAM_API}{token}/sendMessage",
             params={"chat_id": chat_id, "text": text, "parse_mode": "HTML", "disable_web_page_preview": "true"},
             timeout=8,
         )
+        if r.ok:
+            print(f"[telegram] sent — {title}")
+        else:
+            print(f"[telegram] FAILED {r.status_code}: {r.text}")
     except Exception as e:
         print(f"[telegram] error: {e}")
 
