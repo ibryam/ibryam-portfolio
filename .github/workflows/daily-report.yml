@@ -1,0 +1,14 @@
+name: Daily Report
+
+on:
+  schedule:
+    - cron: '0 20 * * *'  # 8pm UTC = ~10pm Geneva / ~11pm Bulgaria
+  workflow_dispatch:       # allow manual trigger from GitHub UI
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger daily report
+        run: |
+          curl -s -f "https://ibryam-ibryam-chatbot.hf.space/admin/daily-report?send_telegram=true"

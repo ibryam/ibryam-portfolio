@@ -1,8 +1,9 @@
 import uuid
 from contextlib import asynccontextmanager
 
+import requests as http_requests
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -10,8 +11,9 @@ load_dotenv(override=True)
 
 from agent import chat as agent_chat
 from evaluator import evaluate
-from memory import init_db, get_unknown_questions, mark_question_answered
+from memory import init_db, get_unknown_questions, mark_question_answered, save_visit, was_ip_seen_recently, get_daily_stats
 from rag import init_rag
+from tools import _telegram
 
 
 @asynccontextmanager
@@ -57,6 +59,54 @@ class ChatResponse(BaseModel):
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.post("/visit")
+async def record_visit(request: Request, body: dict = {}):
+    session_id = body.get("session_id", "")
+    ip = (
+        request.headers.get("CF-Connecting-IP")
+        or request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+        or (request.client.host if request.client else "unknown")
+    )
+
+    if was_ip_seen_recently(ip, minutes=60):
+        return {"status": "already_seen"}
+
+    country, region, city = "Unknown", "", ""
+    try:
+        geo = http_requests.get(f"http://ip-api.com/json/{ip}?fields=status,country,regionName,city", timeout=4).json()
+        if geo.get("status") == "success":
+            country = geo.get("country", "Unknown")
+            region = geo.get("regionName", "")
+            city = geo.get("city", "")
+    except Exception as e:
+        print(f"[visit] geo lookup failed: {e}")
+
+    save_visit(session_id=session_id, ip=ip, country=country, region=region, city=city)
+
+    location = ", ".join(filter(None, [city, region, country]))
+    _telegram("ibryam.com — New Visitor", f"Location: {location}\nSession: {session_id[:8]}…")
+    print(f"[visit] {ip} — {location}")
+    return {"status": "recorded"}
+
+
+@app.get("/admin/daily-report")
+async def daily_report(send_telegram: bool = False):
+    stats = get_daily_stats()
+    if send_telegram:
+        countries_txt = "\n".join(f"  {c}: {n}" for c, n in sorted(stats["countries"].items(), key=lambda x: -x[1])) or "  none"
+        unknowns_txt = "\n".join(f"  • {q[:80]}" for q in stats["unknown_questions"][:5]) or "  none"
+        leads_txt = "\n".join(f"  {l['name']} — {l['email']}" for l in stats["new_leads"]) or "  none"
+        msg = (
+            f"Visits: {stats['visit_count']}\n"
+            f"Countries:\n{countries_txt}\n"
+            f"Questions asked: {stats['question_count']}\n"
+            f"Unknown questions: {stats['unknown_count']}\n{unknowns_txt}\n"
+            f"New leads: {len(stats['new_leads'])}\n{leads_txt}"
+        )
+        _telegram("ibryam.com — Daily Report", msg)
+    return stats
 
 
 @app.get("/admin/unknown-questions")

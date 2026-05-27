@@ -51,6 +51,16 @@ def init_db() -> None:
                 answered   INTEGER DEFAULT 0,
                 ts         DATETIME DEFAULT CURRENT_TIMESTAMP
             );
+
+            CREATE TABLE IF NOT EXISTS visits (
+                id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT,
+                ip         TEXT,
+                country    TEXT,
+                region     TEXT,
+                city       TEXT,
+                ts         DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
         """)
     _seed_faq(conn)
     conn.close()
@@ -157,6 +167,58 @@ def mark_question_answered(question_id: int) -> None:
 
 
 # ── Lead recording ───────────────────────────────────────────────────────────
+
+def save_visit(session_id: str, ip: str, country: str, region: str, city: str) -> None:
+    conn = get_connection()
+    with conn:
+        conn.execute(
+            "INSERT INTO visits (session_id, ip, country, region, city) VALUES (?, ?, ?, ?, ?)",
+            (session_id, ip, country, region, city),
+        )
+    conn.close()
+
+
+def was_ip_seen_recently(ip: str, minutes: int = 60) -> bool:
+    conn = get_connection()
+    row = conn.execute(
+        "SELECT 1 FROM visits WHERE ip = ? AND ts >= datetime('now', ? || ' minutes') LIMIT 1",
+        (ip, f"-{minutes}"),
+    ).fetchone()
+    conn.close()
+    return row is not None
+
+
+def get_daily_stats() -> dict:
+    conn = get_connection()
+    visits = conn.execute(
+        "SELECT country, city, ts FROM visits WHERE ts >= datetime('now', '-1 day') ORDER BY ts DESC"
+    ).fetchall()
+    questions = conn.execute(
+        "SELECT content, ts FROM conversations WHERE role = 'user' AND ts >= datetime('now', '-1 day') ORDER BY ts DESC"
+    ).fetchall()
+    unknown = conn.execute(
+        "SELECT question FROM unknown_questions WHERE ts >= datetime('now', '-1 day')"
+    ).fetchall()
+    leads = conn.execute(
+        "SELECT name, email FROM leads WHERE ts >= datetime('now', '-1 day')"
+    ).fetchall()
+    conn.close()
+
+    countries = {}
+    for v in visits:
+        c = v["country"] or "Unknown"
+        countries[c] = countries.get(c, 0) + 1
+
+    return {
+        "visit_count": len(visits),
+        "unique_ips": len(set(v["city"] for v in visits)),
+        "countries": countries,
+        "question_count": len(questions),
+        "unknown_count": len(unknown),
+        "unknown_questions": [u["question"] for u in unknown],
+        "new_leads": [{"name": l["name"], "email": l["email"]} for l in leads],
+    }
+
 
 def save_lead(session_id: str, email: str, name: str = "", notes: str = "") -> None:
     conn = get_connection()

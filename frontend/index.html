@@ -682,6 +682,7 @@
   var sessionId = '';
   var isOpen = false;
   var isLoading = false;
+  var visitRecorded = false;
 
   // ── Greeting rotation ─────────────────────────────────────────────────────
   var GREETINGS = [
@@ -702,6 +703,14 @@
     if (isOpen) {
       document.getElementById('chat-input').focus();
       scrollMessages();
+      if (!visitRecorded) {
+        visitRecorded = true;
+        fetch(BACKEND_URL + '/visit', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({session_id: sessionId})
+        }).catch(function() {});
+      }
     }
   }
 
