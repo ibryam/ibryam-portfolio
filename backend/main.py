@@ -23,6 +23,9 @@ async def lifespan(app: FastAPI):
     init_db()
     print("[startup] initialising RAG vector store…")
     init_rag()
+    print("[startup] warming up embedding model…")
+    from rag import retrieve_context
+    retrieve_context("data engineer experience skills")
     print("[startup] ready.")
     yield
 
