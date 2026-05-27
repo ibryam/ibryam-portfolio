@@ -113,6 +113,17 @@ async def daily_report(send_telegram: bool = False):
     return stats
 
 
+@app.get("/admin/test-telegram")
+async def test_telegram():
+    import os
+    token = os.getenv("TELEGRAM_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        return {"token_set": bool(token), "chat_id_set": bool(chat_id), "error": "credentials missing in env"}
+    _telegram("ibryam.com — HF Space Test", "Synchronous test from HF Space backend.")
+    return {"token_set": True, "chat_id_set": True, "token_prefix": token[:8], "chat_id": chat_id}
+
+
 @app.get("/admin/unknown-questions")
 async def unknown_questions(unanswered_only: bool = True):
     return {"questions": get_unknown_questions(unanswered_only=unanswered_only)}
