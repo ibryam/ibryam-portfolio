@@ -52,10 +52,9 @@ def _build_system_prompt(rag_chunks: list[str]) -> str:
         "Visitors are HR recruiters, hiring managers, and data professionals.\n\n"
         "TOOL RULES:\n"
         "- Visitor shares an email: call record_user_details immediately.\n"
-        "- ALWAYS call record_unknown_question if the answer is not explicitly found in "
-        "the profile, context, or FAQ below. Do NOT use your general knowledge to fill gaps — "
-        "if it is not in Ibryam's profile, record it. Call the tool first, then tell the visitor "
-        "Ibryam will follow up personally.\n"
+        "- You only know what is written in Ibryam's profile below. You have NO other information "
+        "about him. If something is not in the profile, you genuinely do not know it — call "
+        "record_unknown_question, then tell the visitor Ibryam will follow up personally.\n"
         "- Use faq_lookup for any HR question not covered in the KEY HR QUESTIONS section below.\n"
         "- Respond in the same language the visitor uses.\n\n"
         "RESPONSE STYLE:\n"
@@ -97,6 +96,8 @@ def chat(message: str, session_id: str, history: list[dict] | None = None) -> st
     messages.append({"role": "user", "content": message})
 
     try:
+        unknown_recorded = False
+
         for _ in range(MAX_TOOL_ROUNDS):
             response = _client.chat.completions.create(
                 model=MODEL,
@@ -113,6 +114,8 @@ def chat(message: str, session_id: str, history: list[dict] | None = None) -> st
                     args = json.loads(tc.function.arguments)
                     if tc.function.name in ("record_user_details", "get_session_context", "record_unknown_question"):
                         args.setdefault("session_id", session_id)
+                    if tc.function.name == "record_unknown_question":
+                        unknown_recorded = True
                     result = dispatch_tool(tc.function.name, args)
                     messages.append({
                         "role": "tool",
@@ -123,6 +126,12 @@ def chat(message: str, session_id: str, history: list[dict] | None = None) -> st
                 final_text = (choice.message.content or "").strip()
                 if not final_text:
                     final_text = "I'm not sure how to answer that. Would you like Ibryam to follow up directly?"
+
+                # Auto-flag if agent answered from general knowledge with no profile context
+                if not unknown_recorded and not rag_chunks:
+                    print(f"[agent] auto-flagging unknown question (no RAG context): {message[:80]}")
+                    dispatch_tool("record_unknown_question", {"question": message, "session_id": session_id})
+
                 save_message(session_id, "user", message)
                 save_message(session_id, "assistant", final_text)
                 return final_text
