@@ -1,9 +1,10 @@
+import asyncio
 import uuid
 from contextlib import asynccontextmanager
 
 import requests as http_requests
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -120,29 +121,26 @@ async def mark_answered(question_id: int):
     return {"marked": True, "id": question_id}
 
 
+def _run_evaluator(message: str, rag_chunks: list, reply: str) -> None:
+    verdict = evaluate(message, rag_chunks, reply)
+    if verdict["decision"] == "REJECTED":
+        print(f"[eval] REJECTED ({verdict['confidence']}%) — {verdict['reason']}")
+
+
 @app.post("/chat", response_model=ChatResponse)
-async def chat(req: ChatRequest):
+async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
     if not req.message.strip():
         raise HTTPException(status_code=400, detail="message cannot be empty")
 
     session_id = req.session_id or str(uuid.uuid4())
 
-    reply = agent_chat(
+    reply, rag_chunks = agent_chat(
         message=req.message,
         session_id=session_id,
         history=req.history,
     )
 
-    # Evaluate in background for logging — never blocks or retries (saves API quota)
-    from rag import retrieve_context
-    rag_chunks = retrieve_context(req.message)
-    verdict = evaluate(req.message, rag_chunks, reply)
-    if verdict["decision"] == "REJECTED":
-        print(f"[eval] REJECTED ({verdict['confidence']}%) — {verdict['reason']}")
+    # Evaluator runs after response is returned — zero added latency
+    background_tasks.add_task(_run_evaluator, req.message, rag_chunks, reply)
 
-    return ChatResponse(
-        reply=reply,
-        session_id=session_id,
-        eval_decision=verdict["decision"],
-        eval_confidence=verdict["confidence"],
-    )
+    return ChatResponse(reply=reply, session_id=session_id)

@@ -83,7 +83,14 @@ def _build_system_prompt(rag_chunks: list[str]) -> str:
 
 # ── Agent loop ────────────────────────────────────────────────────────────────
 
-def chat(message: str, session_id: str, history: list[dict] | None = None) -> str:
+_UNCERTAINTY = [
+    "not mentioned", "isn't mentioned", "not in his profile", "not available in",
+    "i don't have", "i do not have", "no information", "not provided", "cannot find",
+    "not specified", "doesn't include", "does not include", "i'm not sure", "i am not sure",
+]
+
+
+def chat(message: str, session_id: str, history: list[dict] | None = None) -> tuple[str, list]:
     rag_chunks = retrieve_context(message)
     system_prompt = _build_system_prompt(rag_chunks)
 
@@ -127,17 +134,18 @@ def chat(message: str, session_id: str, history: list[dict] | None = None) -> st
                 if not final_text:
                     final_text = "I'm not sure how to answer that. Would you like Ibryam to follow up directly?"
 
-                # Auto-flag if agent answered from general knowledge with no profile context
-                if not unknown_recorded and not rag_chunks:
-                    print(f"[agent] auto-flagging unknown question (no RAG context): {message[:80]}")
+                # Auto-flag if agent said it doesn't know but didn't call the tool
+                response_signals_unknown = any(p in final_text.lower() for p in _UNCERTAINTY)
+                if not unknown_recorded and (not rag_chunks or response_signals_unknown):
+                    print(f"[agent] auto-flagging unknown question: {message[:80]}")
                     dispatch_tool("record_unknown_question", {"question": message, "session_id": session_id})
 
                 save_message(session_id, "user", message)
                 save_message(session_id, "assistant", final_text)
-                return final_text
+                return final_text, rag_chunks
 
     except Exception as e:
         print(f"[agent] error: {e}")
-        return "I ran into an issue — please try again in a moment."
+        return "I ran into an issue — please try again in a moment.", rag_chunks
 
-    return "I ran into an issue generating a response. Please try again."
+    return "I ran into an issue generating a response. Please try again.", rag_chunks
