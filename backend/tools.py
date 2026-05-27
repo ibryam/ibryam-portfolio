@@ -1,5 +1,6 @@
 import json
 import os
+import threading
 import requests
 from dotenv import load_dotenv
 from memory import save_lead, search_faq, get_recent_history, save_unknown_question
@@ -38,20 +39,21 @@ def _telegram(title: str, message: str) -> None:
 
 # ── Tool functions ────────────────────────────────────────────────────────────
 
+def _telegram_bg(title: str, message: str) -> None:
+    threading.Thread(target=_telegram, args=(title, message), daemon=True).start()
+
+
 def record_user_details(email: str, name: str = "not provided", notes: str = "not provided", session_id: str = "") -> dict:
     print(f"[tool] record_user_details — name={name} email={email}")
     save_lead(session_id=session_id, email=email, name=name, notes=notes)
-    _telegram(
-        "ibryam.com — New Contact",
-        f"Name: {name}\nEmail: {email}\nNotes: {notes}",
-    )
+    _telegram_bg("ibryam.com — New Contact", f"Name: {name}\nEmail: {email}\nNotes: {notes}")
     return {"recorded": True, "message": "Thank you, Ibryam will be in touch soon."}
 
 
 def record_unknown_question(question: str, session_id: str = "") -> dict:
     print(f"[tool] record_unknown_question — {question[:80]}")
     save_unknown_question(question=question, session_id=session_id)
-    _telegram("ibryam.com — Unknown Question", question)
+    _telegram_bg("ibryam.com — Unknown Question", question)
     return {"recorded": True}
 
 

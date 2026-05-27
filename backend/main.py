@@ -66,7 +66,7 @@ async def health():
 
 
 @app.post("/visit")
-async def record_visit(request: Request, body: dict = {}):
+async def record_visit(request: Request, background_tasks: BackgroundTasks, body: dict = {}):
     session_id = body.get("session_id", "")
     ip = (
         request.headers.get("CF-Connecting-IP")
@@ -90,7 +90,7 @@ async def record_visit(request: Request, body: dict = {}):
     save_visit(session_id=session_id, ip=ip, country=country, region=region, city=city)
 
     location = ", ".join(filter(None, [city, region, country]))
-    _telegram("ibryam.com — New Visitor", f"Location: {location}\nSession: {session_id[:8]}…")
+    background_tasks.add_task(_telegram, "ibryam.com — New Visitor", f"Location: {location}\nSession: {session_id[:8]}…")
     print(f"[visit] {ip} — {location}")
     return {"status": "recorded"}
 
