@@ -53,7 +53,7 @@ def record_user_details(email: str, name: str = "not provided", notes: str = "no
 def record_unknown_question(question: str, session_id: str = "") -> dict:
     print(f"[tool] record_unknown_question — {question[:80]}")
     save_unknown_question(question=question, session_id=session_id)
-    _telegram_bg("ibryam.com — Unknown Question", question)
+    _telegram("ibryam.com — Unknown Question", question)
     return {"recorded": True}
 
 
