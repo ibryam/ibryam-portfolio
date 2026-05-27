@@ -2,7 +2,7 @@
 title: Ibryam Chatbot
 emoji: 🤖
 colorFrom: blue
-colorTo: teal
+colorTo: green
 sdk: docker
 pinned: false
 app_port: 7860
