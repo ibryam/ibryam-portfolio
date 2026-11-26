@@ -2,22 +2,20 @@
 
 ## Professional Experience
 
-### Senior Data Analyst — UKG (formerly Kronos / Ultimate Software)
+### Senior Business Data Analyst — UKG (formerly Kronos / Ultimate Software)
 **July 2022 – Present**
 
-UKG is a global HR and workforce management software company. As Senior Data Analyst I work with BigQuery, SQL, Tableau, and Python daily.
+UKG is a global HR and workforce management software company. Ibryam's official title is Senior Business Data Analyst; the work itself is analytics engineering — SQL data modelling and scheduled transformation workflows in Google BigQuery and Dataform, plus reporting in Tableau and AI automation in Python.
 
 Key responsibilities and achievements:
-- Own and maintain a suite of Tableau dashboards tracking operational KPIs across multiple business units, used daily by senior stakeholders and team leads for decision-making.
-- Translate complex data from multiple sources into clear, management-ready reports with written insights and recommendations — not just charts.
-- Write advanced SQL queries (JOINs, window functions, subqueries) to extract and combine data from large relational databases and Google BigQuery.
-- Collaborate directly with data engineers to define data structures, transformations, and business rules, ensuring data accuracy and integrity throughout the pipeline.
-- Led multiple AI-driven Python projects leveraging ChatGPT, Gemini, and Claude to automate the summarisation of large datasets and ticket data, delivering faster operational insights and significantly reducing manual reporting overhead.
-- Conduct exploratory data analysis to identify trends, patterns, and irregularities in operational data, escalating findings to relevant stakeholders.
-- Work with stakeholders across business units to gather requirements, translate business questions into data queries, and deliver visualization solutions that drive user adoption.
-- Automate recurring reporting tasks using SQL scripts and Python (Pandas), reducing manual effort and improving report delivery time.
-- Maintain data quality by identifying and resolving data inconsistencies, duplicates, and misattributions in source systems.
-- Endorsed in every project for documentation quality — writing comprehensive Confluence pages and Jira tickets.
+- Build and maintain SQL data models and transformation workflows in Google BigQuery and Dataform (star and snowflake schemas) that run on schedules with managed dependencies and feed production dashboards used by internal teams and customers.
+- Fixed a crashing, data-heavy customer report by reverse-engineering its calculation logic, migrating it from Tableau into BigQuery SQL, reducing the data volume and caching results; validated the new output against the original.
+- Implemented customer- and country-level row-level security for an internal operations team, using user attributes and rule-based access logic.
+- Built usage monitoring on self-service reports to identify what users need and prioritise development proactively.
+- Write complex SQL queries, reports and analytical extracts on request, translating business requirements into practical technical solutions.
+- Collaborate with data engineers to understand data structures, transformations, business rules and dependencies, ensuring data accuracy and integrity.
+- Led and owned multiple AI-enabled Python projects with data engineers (Gemini and Claude) — e.g. a tool that consolidates internal reports and tickets and summarises past events and lessons learned, reducing manual reporting effort.
+- Document workflows, SQL logic, business rules and operating procedures in Jira and Confluence — endorsed in every project for documentation quality.
 
 ---
 
@@ -61,17 +59,7 @@ Key responsibilities:
 
 ## Certifications
 
+- dbt Fundamentals — dbt Labs
 - Alteryx Designer Core Certification
-- Web Scraping and API Fundamentals in Python (Udemy)
-- Python for Data Analysis & Business Intelligence (Udemy)
-- 100 Days of Code: The Complete Python Pro Bootcamp (Udemy)
-- Data Analysis with Pandas and Python (Udemy)
-- The Complete Python Bootcamp from Zero to Hero (Udemy)
-- Web Scraping in Python with Selenium (Udemy)
-- Python for Data Science and Machine Learning Bootcamp (Udemy)
-- Machine Learning & Data Science: The Complete Visual Guide (Udemy)
-- Machine Learning 101 with Scikit-learn and Statsmodels (Udemy)
-- The Complete SQL Bootcamp (Udemy)
-- The Business Intelligence Analyst Course (Udemy)
-- Master Git and GitHub (Udemy)
-- dbt Core Zero to Hero Bootcamp (Udemy)
+
+Completed courses (Udemy): The Complete SQL Bootcamp; The Complete dbt (Data Build Tool) Bootcamp Zero to Hero; Master Git and GitHub; Python for Data Analysis & Business Intelligence; Data Analysis with Pandas and Python; Web Scraping and API Fundamentals in Python; The Business Intelligence Analyst Course; The Complete Python Bootcamp from Zero to Hero; plus machine-learning courses (scikit-learn, statsmodels) at introductory level.

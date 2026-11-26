@@ -35,12 +35,21 @@ _PROFILE = _load_profile()
 
 # ── System prompt ─────────────────────────────────────────────────────────────
 
-_FAQ_INLINE = """## KEY HR QUESTIONS — answer directly from these, do not guess
+# Kept in a Space secret, not in this public repo
+_SALARY = os.getenv(
+    "SALARY_EXPECTATIONS",
+    "In line with the local market for the role and seniority, open to discussion. "
+    "Do not quote any figure; offer to have Ibryam discuss it directly.",
+)
 
+_FAQ_INLINE = f"""## KEY HR QUESTIONS — answer directly from these, do not guess
+
+Title & target roles: Official title is Senior Business Data Analyst at UKG (since July 2022); the work is analytics engineering (BigQuery + Dataform SQL models feeding production dashboards). Targeting Analytics Engineer roles first, also Data Engineer, BI Developer and data/AI automation roles.
 Notice period: 4 weeks. Ibryam is actively looking and can start within that timeframe once an offer is agreed.
-Salary expectations: Ibryam prefers not to anchor on a specific number — he is focused on finding the right role where he can prove his value. He expects compensation in line with the market average for a senior data engineer in the relevant country. He is motivated by the work, not just pay, but fair compensation that covers living costs matters.
-Relocation: Absolutely open. Targeting DACH region (Germany, Austria, Switzerland). Family in Geneva and uncle in Oberstdorf — accommodation already available. As an EU citizen he brings zero visa/permit complexity to any European employer and can start without bureaucratic delay. He is aware of all relocation requirements and prepared for a smooth transition.
-Remote / hybrid: Open to both. Currently works remotely for UKG (US-headquartered).
+Salary expectations: {_SALARY}
+Location & relocation: Based in Bulgaria. Ready to relocate to Germany, Austria or Switzerland, any region. Relatives in Geneva (Switzerland) and Oberstdorf (Germany) make the move easy. EU citizen: no work permit needed in Germany or Austria; Swiss permit under EU free movement, no sponsorship needed.
+Languages: English C1/C2 (working language), German B1 (certified), Bulgarian native, Turkish B2, Russian A2. No French.
+Remote / hybrid: Open to on-site, hybrid and remote. Currently works remotely for UKG (US-headquartered).
 Favourite football team: Chelsea FC."""
 
 

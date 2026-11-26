@@ -36,16 +36,16 @@ Key features:
 
 ---
 
-## 3. ATS Skipper v2
-**Type:** AI-powered job application automation tool
+## 3. Job Match Engine (GitHub repo: ats-skipper)
+**Type:** AI-powered job matching and application assistant
 **Tech:** Python, Gemini 2.5 Flash, Groq (llama-3.3-70b), LinkedIn scraping, Selenium, docx generation
 **GitHub:** https://github.com/ibryam/ats-skipper
 
-An automated job application workflow that scrapes multiple job boards, scores each listing against your profile using 8 evaluation dimensions, and generates tailored CVs and cover letters.
+A personal job-search assistant that collects listings from several job boards, scores how well each one fits Ibryam's profile across 8 dimensions, and drafts tailored CVs and cover letters for the best matches.
 
 Key features:
 - Scrapes 4 job boards: LinkedIn, jobs.ch, jobscout24.ch, xing.com
-- Multi-dimensional ATS scoring (8 dimensions: skills 35%, tech 25%, seniority 20%, language 10%, industry 5%, location 5%)
+- Multi-dimensional match scoring (8 dimensions: skills 35%, tech 25%, seniority 20%, language 10%, industry 5%, location 5%)
 - Letter grade output (A+/A/B+/B/C+/C/D/F) for each job
 - AI-generated tailored CV as .docx per application
 - Cover letter generation (German JD → German cover letter)
@@ -75,7 +75,7 @@ Key features:
 
 ## 5. AI Career Chatbot (ibryam.com)
 **Type:** Agentic AI chatbot embedded in personal portfolio
-**Tech:** Python, FastAPI, OpenAI gpt-4o-mini, Gemini 2.0 Flash (evaluator), Groq llama-3.1-8b-instant (evaluator fallback), ChromaDB, LangChain, SQLite, Telegram Bot API, HuggingFace Spaces, Cloudflare Workers
+**Tech:** Python, FastAPI, Claude Sonnet 5 (Anthropic API, tool use, prompt caching), Gemini 2.0 Flash (evaluator), Groq llama-3.1-8b-instant (evaluator fallback), ChromaDB, LangChain, SQLite, Telegram Bot API, HuggingFace Spaces (Docker), Cloudflare Pages
 
 A personal AI assistant that represents Ibryam on his portfolio website. HR recruiters can ask questions about his experience, projects, skills, and background, and get accurate, grounded answers.
 
@@ -84,11 +84,11 @@ Key features:
 - FAQ SQLite database with FTS5 full-text search — structured answers to common HR questions
 - Conversation memory — remembers context within a session
 - Dual-LLM evaluator: Gemini 2.0 Flash as primary, Groq llama-3.1-8b-instant as fallback — APPROVED/REJECTED quality gate per response
-- Telegram Bot notifications — alerts Ibryam when a recruiter shares their email or asks an unanswered question
+- Telegram Bot notifications — instant alerts when a recruiter shares their email or asks an unanswered question, plus one summary per conversation (location, contact, full Q&A)
 - Agent tools: record_user_details, record_unknown_question, faq_lookup, get_session_context
 - Unknown questions persisted to SQLite for review and continuous knowledge base improvement
 - Custom floating chat widget matching the portfolio's navy/teal design
-- Deployed entirely free: HuggingFace Spaces Docker (backend) + Cloudflare Workers (frontend)
+- Deployed on HuggingFace Spaces Docker (backend) + Cloudflare Pages (frontend); the only running cost is a few cents of Claude API usage per conversation
 
 ---
 
