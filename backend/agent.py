@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from openai import OpenAI
+import anthropic
 
 from memory import save_message, get_recent_history
 from rag import retrieve_context
@@ -11,13 +11,16 @@ from tools import TOOL_SCHEMAS, dispatch_tool
 
 load_dotenv(override=True)
 
-_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+_client = anthropic.Anthropic()
 
-MODEL = os.getenv("AGENT_MODEL", "gpt-4o-mini")
+MODEL = os.getenv("AGENT_MODEL", "claude-sonnet-5")
 MAX_TOOL_ROUNDS = 5
 SHOW_PLAN = os.getenv("SHOW_PLAN", "false").lower() == "true"
 
-_TOOLS = [{"type": "function", "function": schema} for schema in TOOL_SCHEMAS]
+_TOOLS = [
+    {"name": s["name"], "description": s["description"], "input_schema": s["parameters"]}
+    for s in TOOL_SCHEMAS
+]
 
 
 # ── Load profile once at startup ──────────────────────────────────────────────
@@ -41,27 +44,33 @@ Remote / hybrid: Open to both. Currently works remotely for UKG (US-headquartere
 Favourite football team: Chelsea FC."""
 
 
-def _build_system_prompt(rag_chunks: list[str]) -> str:
-    context = ""
-    if rag_chunks:
-        joined = "\n\n".join(f"[{i+1}] {c}" for i, c in enumerate(rag_chunks))
-        context = f"\n\n## RELEVANT CONTEXT FOR THIS QUESTION\n{joined}"
-
+def _build_static_prompt() -> str:
     return (
-        "You are acting as Ibryam Faik on his personal portfolio website ibryam.com. "
-        "Visitors are HR recruiters, hiring managers, and data professionals.\n\n"
-        "TOOL RULES:\n"
-        "- Visitor shares an email: call record_user_details immediately.\n"
-        "- You only know what is written in Ibryam's profile below. You have NO other information "
-        "about him. If something is not in the profile, you genuinely do not know it — call "
-        "record_unknown_question, then tell the visitor Ibryam will follow up personally.\n"
-        "- Use faq_lookup for any HR question not covered in the KEY HR QUESTIONS section below.\n"
-        "- Respond in the same language the visitor uses.\n\n"
+        "You are Ibryam Faik's AI assistant on his portfolio website ibryam.com. "
+        "Visitors are mostly HR recruiters and hiring managers deciding whether to contact him, "
+        "so every answer should help them judge his fit quickly. Refer to Ibryam in the third "
+        "person (\"he\", \"Ibryam\") — the chat widget introduces you as his assistant.\n\n"
+        "WHAT YOU KNOW:\n"
+        "Your only source of facts about Ibryam is his profile, the key HR answers, the relevant "
+        "context section (when present), and faq_lookup results. If the answer isn't in any of "
+        "those, don't guess or fill in plausible details — call record_unknown_question and tell "
+        "the visitor Ibryam will follow up personally. Inventing a skill or date would mislead a "
+        "recruiter, which is worse than saying you don't know.\n\n"
+        "TOOLS:\n"
+        "- When a visitor shares an email address, call record_user_details.\n"
+        "- For HR questions not covered by the key HR answers below, check faq_lookup before answering.\n\n"
         "RESPONSE STYLE:\n"
-        "- Be genuine and conversational, not corporate or robotic.\n"
-        "- Vary your language and sentence structure — don't start responses the same way each time.\n"
-        "- Keep answers focused and concise. Avoid padding or filler phrases.\n"
-        "- You are representing a real person — let some personality come through.\n\n"
+        "- Reply in the visitor's language.\n"
+        "- Lead with the direct answer, then add one or two concrete specifics from the profile "
+        "(a project, tool, or result) that back it up.\n"
+        "- Simple questions get 2–4 sentences. Go longer only for job description analyses or "
+        "when the visitor asks for detail.\n"
+        "- Be warm and conversational, like a colleague who knows Ibryam well — not a sales pitch. "
+        "Vary how you open your replies.\n"
+        "- When it fits naturally (e.g. after a strong match or a question about availability), "
+        "invite the visitor to leave their email so Ibryam can reach out. Don't ask every turn.\n"
+        "- The chat window renders only **bold** text and line breaks. Don't use headings, tables, "
+        "links in markdown syntax, or italics; for lists, put each item on its own line starting with \"• \".\n\n"
         "JOB DESCRIPTION MATCHING:\n"
         "When a visitor pastes a job description, respond with a structured match analysis:\n"
         "1. **Overall match: X%** — honest score based on skills, experience level, and requirements\n"
@@ -71,7 +80,6 @@ def _build_system_prompt(rag_chunks: list[str]) -> str:
         "Keep the analysis grounded in the actual JD text and Ibryam's real profile.\n\n"
         f"{_FAQ_INLINE}\n\n"
         f"## IBRYAM'S PROFILE\n{_PROFILE}"
-        f"{context}"
         + (
             "\n\nPLAN MODE: Before answering, briefly outline your steps as a numbered list "
             "prefixed with '**Plan:**'. After answering, show the completed plan with each step "
@@ -79,6 +87,17 @@ def _build_system_prompt(rag_chunks: list[str]) -> str:
             if SHOW_PLAN else ""
         )
     )
+
+
+_STATIC_PROMPT = _build_static_prompt()
+
+
+def _build_system_prompt(rag_chunks: list[str]) -> list[dict]:
+    blocks = [{"type": "text", "text": _STATIC_PROMPT, "cache_control": {"type": "ephemeral"}}]
+    if rag_chunks:
+        joined = "\n\n".join(f"[{i+1}] {c}" for i, c in enumerate(rag_chunks))
+        blocks.append({"type": "text", "text": f"## RELEVANT CONTEXT FOR THIS QUESTION\n{joined}"})
+    return blocks
 
 
 # ── Agent loop ────────────────────────────────────────────────────────────────
@@ -101,7 +120,7 @@ def chat(message: str, session_id: str, history: list[dict] | None = None) -> tu
     if history is None:
         history = get_recent_history(session_id)
 
-    messages = [{"role": "system", "content": system_prompt}]
+    messages = []
     for msg in history:
         messages.append({"role": msg["role"], "content": msg["content"]})
     messages.append({"role": "user", "content": message})
@@ -110,37 +129,41 @@ def chat(message: str, session_id: str, history: list[dict] | None = None) -> tu
         unknown_recorded = False
 
         for _ in range(MAX_TOOL_ROUNDS):
-            response = _client.chat.completions.create(
+            response = _client.messages.create(
                 model=MODEL,
+                max_tokens=16000,
+                system=system_prompt,
                 messages=messages,
                 tools=_TOOLS,
+                output_config={"effort": "medium"},
             )
-            choice = response.choices[0]
 
-            if choice.finish_reason == "tool_calls":
-                tool_calls = choice.message.tool_calls
-                messages.append(choice.message)
+            if response.stop_reason == "tool_use":
+                messages.append({"role": "assistant", "content": response.content})
+                tool_results = []
 
-                for tc in tool_calls:
-                    args = json.loads(tc.function.arguments)
-                    if tc.function.name in ("record_user_details", "get_session_context", "record_unknown_question"):
+                for block in response.content:
+                    if block.type != "tool_use":
+                        continue
+                    args = dict(block.input)
+                    if block.name in ("record_user_details", "get_session_context", "record_unknown_question"):
                         args.setdefault("session_id", session_id)
-                    if tc.function.name == "record_unknown_question":
+                    if block.name == "record_unknown_question":
                         unknown_recorded = True
-                    result = dispatch_tool(tc.function.name, args)
-                    messages.append({
-                        "role": "tool",
-                        "tool_call_id": tc.id,
-                        "content": result,
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": dispatch_tool(block.name, args),
                     })
+                messages.append({"role": "user", "content": tool_results})
             else:
-                final_text = (choice.message.content or "").strip()
+                final_text = "".join(b.text for b in response.content if b.type == "text").strip()
                 if not final_text:
                     final_text = "I'm not sure how to answer that. Would you like Ibryam to follow up directly?"
 
                 # Auto-flag if agent said it doesn't know but didn't call the tool
                 response_signals_unknown = any(p in final_text.lower() for p in _UNCERTAINTY)
-                if not unknown_recorded and (not rag_chunks or response_signals_unknown):
+                if not unknown_recorded and response_signals_unknown:
                     print(f"[agent] auto-flagging unknown question: {message[:80]}")
                     dispatch_tool("record_unknown_question", {"question": message, "session_id": session_id})
 

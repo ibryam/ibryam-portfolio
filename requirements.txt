@@ -1,6 +1,7 @@
 fastapi
 uvicorn[standard]
 openai
+anthropic
 groq
 chromadb
 langchain-chroma
