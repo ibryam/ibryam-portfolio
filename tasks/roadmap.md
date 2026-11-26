@@ -24,11 +24,33 @@ These decisions were made deliberately. An implementing agent must follow them, 
 | D4 | Replace all emoji icons (💬 ➤ ✕ 📋) with inline SVG | Emoji render differently per OS and look unpolished next to a refined design |
 | D5 | Tableau embeds become click-to-load facades (static preview + play button) | Two eager Tableau iframes are the single biggest performance problem on the page |
 | D6 | Chatbot gets SSE streaming; non-streaming `/chat` stays as fallback | Perceived latency is the #1 chat UX complaint; streaming fixes it without changing the agent |
-| D7 | Keep `gpt-4o-mini` as the agent model for now | It's cheap, supports streaming + tools; model upgrades are a config change (`AGENT_MODEL`), not a roadmap item |
+| D7 | Agent model is Claude Sonnet 5 (`claude-sonnet-5`, switched 2026-11-26) | OpenAI calls were failing; model changes stay a config change (`AGENT_MODEL`), not a roadmap item |
 | D8 | Evaluator stays async/log-only, but REJECTED verdicts now notify via Telegram | Blocking the user on a second LLM round-trip is worse UX than occasionally shipping an imperfect answer |
 | D9 | Personal branding: hero/page title says "Data & AI Engineer"; factual employment says "Senior Data Analyst at UKG" | Branding describes the target role; facts must stay accurate for recruiters who verify |
 | D10 | Admin endpoints get a shared-secret header (`X-Admin-Token`), not full auth | Single-user admin surface; a token is proportionate |
 | D11 | No light mode | One excellent theme beats two mediocre ones; the brand is dark |
+
+---
+
+## Phase H — Hiring content for DACH  *(added 2026-11-26 — top priority, runs before Phase 1)*
+
+The page exists to get Ibryam hired in DACH, Switzerland first. Phases 1–4 make it polished; this phase makes it *convincing*. Content changes only — no design-system dependency.
+
+**Why first:** a recruiter spends ~30 seconds deciding. Today those seconds hit stale facts (German "B1 by June 2026"), an unclear location story, hobby-style metrics, and a one-line description of the current job. No amount of design polish fixes that.
+
+**Scope:**
+1. **Fix trust-breakers** — stale/contradictory facts across page, knowledge base and LinkedIn: German level date, job title (Data Engineer vs Senior Data Analyst), location (Cessy/Geneva area vs "targeting a move"), chatbot tech in `projects.md`, typo in `profile.md`.
+2. **Recruiter quick-facts strip** near the top: work authorisation (EU citizen — Swiss permit under the free-movement agreement, no sponsorship), availability (4 weeks), target locations, languages with CEFR levels, work mode.
+3. **Location positioning** — if based in the Geneva area (Pays de Gex), lead with "Geneva-based, available now" (cross-border G permit eligible) instead of relocation.
+4. **Impact-led hero + UKG section** — replace "0 CHF infra cost / 3 data sources per project" with business outcomes; rewrite UKG experience as 3–4 quantified bullets.
+5. **Show the AI work** — add the AI Career Chatbot as a featured project ("you're talking to it"); decide whether ATS Skipper is shown/renamed (name reads as gaming recruiters' systems).
+6. **CV download** — 2-page PDF in Swiss/German convention (photo optional, nationality + permit status, CEFR languages); English + German versions.
+7. **German-language layer** — German hero/summary (or full DE page) + "Ask in German" on the chat widget.
+8. **Discoverability** — meta description, Open Graph image (LinkedIn previews are currently blank), JSON-LD `Person`, keywords recruiters search: "Data Engineer Geneva/Zürich", "Analytics Engineer", dbt, BigQuery.
+9. **Market-gap signal** — Swiss/German corporate data stacks lean on Azure/Databricks/Snowflake/Power BI; pick one (project or certification) to close the most frequent gap in target job ads.
+10. **Social proof + contact** — real colleague/manager quote(s), Swiss phone number, one-click "book a call" link.
+
+**Exit criteria:** every fact on page, knowledge base, CV and LinkedIn agrees; a recruiter can answer "can we hire him, where, when, in what language" without scrolling past the hero; LinkedIn share of ibryam.com shows image + title + description; CV downloadable in EN and DE.
 
 ---
 

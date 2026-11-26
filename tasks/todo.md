@@ -5,11 +5,36 @@ Rule: a box may only be ticked when its **AC** (acceptance criteria) is verifiab
 
 ---
 
+## Phase H — Hiring content for DACH *(top priority — see roadmap)*
+
+Items marked 🧑 need facts only Ibryam can provide.
+
+- [ ] **H.1 Answer the fact sheet** 🧑 — current title on payroll/LinkedIn, German level today (certificate?), French level, where you live now, earliest start date, target cities, salary range (CHF), 2–4 numbers from UKG work, CV PDF.
+      **AC:** answers recorded in `backend/knowledge_base/profile.md`.
+- [ ] **H.2 Fix trust-breakers** — German date, title, location story, `projects.md` chatbot tech (now Claude Sonnet 5 / Cloudflare Pages), "ata professional" typo in `profile.md`.
+      **AC:** grep for "June 2026", "gpt-4o-mini", "Cloudflare Workers" across `frontend/` + `knowledge_base/` returns nothing stale.
+- [ ] **H.3 Recruiter quick-facts strip** under the hero (authorisation · availability · locations · languages · work mode).
+      **AC:** visible without scrolling at 1366×768; all five facts present.
+- [ ] **H.4 Impact-led hero stats + UKG rewrite** (needs H.1 numbers).
+      **AC:** every hero stat is a business outcome or credential; UKG entry has 3–4 bullets, ≥ 2 quantified.
+- [ ] **H.5 AI Chatbot featured project card** (+ decision on ATS Skipper visibility/name).
+      **AC:** card with architecture one-liner, stack, GitHub link, "try it" button opening the widget.
+- [ ] **H.6 CV PDF (EN + DE)** in `frontend/assets/` + download buttons (merges with 2.8).
+      **AC:** both PDFs download with proper filenames; facts match page.
+- [ ] **H.7 German layer** — DE hero/summary or `/de/` page; chat widget hint "Fragen Sie auf Deutsch".
+      **AC:** German text reviewed by a native speaker or tutor before publishing.
+- [ ] **H.8 SEO + link preview** (merges with 2.1/2.2) with DACH keywords.
+      **AC:** LinkedIn Post Inspector shows image, title, description.
+- [ ] **H.9 Market-gap decision** — scan ~20 target job ads (jobs.ch, LinkedIn CH/DE), tally required tools, choose one gap to close.
+      **AC:** tally table in Review Notes; chosen project/cert added to Phase 5.
+- [ ] **H.10 Social proof + contact** — 1–2 real quotes (with permission), Swiss phone, booking link.
+      **AC:** visible on page; quotes attributed by role.
+
 ## Phase 0 — Hygiene & bug fixes
 
 - [ ] **0.1 Fix Tableau scaling heights** — in `frontend/index.html`, the `VIZZES` array (`h:867`, `h:967`) disagrees with the actual iframe heights (868, 1167). Refactor `scaleAll()` to read `data-w`/`data-h` attributes from each `.viz-scaler` (add the missing `data-w="900" data-h="1167"` to `#scaler-smi`) and delete the hardcoded `VIZZES` numbers.
       **AC:** at 1400px, 1024px, 768px and 375px viewport widths, both dashboards show their full height with no clipped bottom and no dead space below.
-- [ ] **0.2 Remove empty-RAG auto-flag (regression)** — `backend/agent.py:143` still has `if not unknown_recorded and (not rag_chunks or response_signals_unknown)`. Commit `6e60af2` intended to drop the `not rag_chunks` half. Change condition to `if not unknown_recorded and response_signals_unknown`.
+- [x] **0.2 Remove empty-RAG auto-flag (regression)** — `backend/agent.py:143` still has `if not unknown_recorded and (not rag_chunks or response_signals_unknown)`. Commit `6e60af2` intended to drop the `not rag_chunks` half. Change condition to `if not unknown_recorded and response_signals_unknown`.
       **AC:** a question the model answers confidently but with zero RAG hits (e.g. "hi") does NOT insert into `unknown_questions`.
 - [ ] **0.3 Prune `_UNCERTAINTY` list** — remove the generic phrases `"that information"`, `"this information"`, `"no details"`, `"not share"` from `backend/agent.py:86-94`; keep only phrases that unambiguously signal "I don't know".
       **AC:** reply "Happy to share that information: he uses BigQuery daily" does not trigger auto-flag.
@@ -17,9 +42,9 @@ Rule: a box may only be ticked when its **AC** (acceptance criteria) is verifiab
       **AC:** two messages saved in the same second return in insertion order.
 - [ ] **0.5 Escape FTS5 queries** — in `backend/memory.py:search_faq`, wrap: `safe = '"' + query.replace('"', '""') + '"'` and MATCH on `safe`.
       **AC:** `search_faq('what is your "salary" (gross)?')` returns a list, raises nothing.
-- [ ] **0.6 Gitignore server logs** — add `backend/server.log` + `backend/server_err.log` (or `backend/*.log`) to `.gitignore`.
+- [x] **0.6 Gitignore server logs** — add `backend/server.log` + `backend/server_err.log` (or `backend/*.log`) to `.gitignore`.
       **AC:** `git status` no longer lists them.
-- [ ] **0.7 Update CLAUDE.md to reality** — stack section: agent = OpenAI `gpt-4o-mini` (`AGENT_MODEL`), evaluator = Gemini 2.0 Flash → Groq fallback, async log-only (no retry), notifications = Telegram (`TELEGRAM_TOKEN`/`TELEGRAM_CHAT_ID`), env-var table refreshed (`OPENAI_API_KEY`, drop Pushover).
+- [x] **0.7 Update CLAUDE.md to reality** — stack section: agent = OpenAI `gpt-4o-mini` (`AGENT_MODEL`), evaluator = Gemini 2.0 Flash → Groq fallback, async log-only (no retry), notifications = Telegram (`TELEGRAM_TOKEN`/`TELEGRAM_CHAT_ID`), env-var table refreshed (`OPENAI_API_KEY`, drop Pushover).
       **AC:** every model/env-var named in CLAUDE.md appears in the code; nothing in CLAUDE.md contradicts `agent.py`/`evaluator.py`/`tools.py`.
 - [ ] **0.8 Commit pending nav-order change** — About before Experience (already in working tree).
       **AC:** clean `git status` on `frontend/index.html`.
@@ -112,6 +137,9 @@ Rule: a box may only be ticked when its **AC** (acceptance criteria) is verifiab
 ## Done
 
 <!-- Move completed items here with date + commit hash -->
+- 2026-11-26 `ac0e441` Agent switched to Claude Sonnet 5 (`claude-sonnet-5`), prompt style fixes, 0.2 empty-RAG auto-flag removed
+- 2026-11-26 `8b99099` Telegram: one summary per conversation; HTML-escape + 4096-char guard (fixed silently dropped messages)
+- 2026-11-26 `621cc6a` 0.6 `*.log` gitignored; 0.7 CLAUDE.md rewritten for current stack
 
 ## Review Notes
 

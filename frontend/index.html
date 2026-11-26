@@ -3,7 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ibryam Faik — Data & AI Engineer</title>
+  <title>Ibryam Faik — Analytics Engineer | BigQuery · SQL · dbt · AI</title>
+  <meta name="description" content="Ibryam Faik — Analytics Engineer with 5+ years in data: SQL data models in BigQuery and Dataform/dbt, Tableau and AI automation. EU citizen, German B1, ready to relocate to Germany, Austria or Switzerland." />
+  <link rel="canonical" href="https://www.ibryam.com/" />
+  <meta name="theme-color" content="#1B2A4A" />
+  <meta property="og:type" content="profile" />
+  <meta property="og:url" content="https://www.ibryam.com/" />
+  <meta property="og:title" content="Ibryam Faik — Analytics Engineer" />
+  <meta property="og:description" content="SQL data models in BigQuery & Dataform/dbt, Tableau, AI automation. EU citizen · German B1 · ready to relocate to DE / AT / CH." />
+  <meta property="og:image" content="https://www.ibryam.com/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Ibryam Faik — Analytics Engineer" />
+  <meta name="twitter:description" content="SQL data models in BigQuery & Dataform/dbt, Tableau, AI automation. EU citizen · German B1 · ready to relocate to DE / AT / CH." />
+  <meta name="twitter:image" content="https://www.ibryam.com/assets/og-image.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ibryam Faik",
+    "jobTitle": "Analytics Engineer",
+    "url": "https://www.ibryam.com/",
+    "image": "https://www.ibryam.com/assets/og-image.png",
+    "email": "mailto:ibryamfibryam@gmail.com",
+    "nationality": { "@type": "Country", "name": "Bulgaria" },
+    "worksFor": { "@type": "Organization", "name": "UKG" },
+    "knowsLanguage": ["en", "de", "bg", "tr", "ru"],
+    "knowsAbout": ["Analytics Engineering", "SQL", "Google BigQuery", "Dataform", "dbt", "Data Modeling", "Data Quality", "Tableau", "Python", "Alteryx", "LLM Applications", "RAG"],
+    "hasCredential": [
+      { "@type": "EducationalOccupationalCredential", "name": "dbt Fundamentals", "recognizedBy": { "@type": "Organization", "name": "dbt Labs" } },
+      { "@type": "EducationalOccupationalCredential", "name": "Alteryx Designer Core Certification", "recognizedBy": { "@type": "Organization", "name": "Alteryx" } }
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/in/ibryam",
+      "https://github.com/ibryam",
+      "https://public.tableau.com/app/profile/ibryam"
+    ]
+  }
+  </script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231B2A4A'/><rect x='4' y='18' width='5' height='10' rx='1' fill='%232EC4A6'/><rect x='11' y='12' width='5' height='16' rx='1' fill='%232EC4A6'/><rect x='18' y='7' width='5' height='21' rx='1' fill='%232EC4A6'/><rect x='25' y='14' width='3' height='14' rx='1' fill='%2364D8C0'/></svg>" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -95,6 +133,9 @@
     .hero h1 span { color: var(--teal); }
     .hero-sub { font-size: 1.1rem; color: var(--muted); max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.7; }
     .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .quick-facts { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin: 2rem auto 0; max-width: 860px; }
+    .quick-facts li { background: var(--navy-card); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.9rem; font-size: 0.85rem; color: var(--text); text-align: left; }
+    .quick-facts li span { display: block; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 0.1rem; }
     .btn { display: inline-block; padding: 0.75rem 1.8rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; }
     .btn-primary { background: var(--teal); color: var(--navy); }
     .btn-primary:hover { background: #26b395; transform: translateY(-1px); }
@@ -161,8 +202,14 @@
     .about-card-title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 1.2rem; }
     .about-card-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; }
     .about-card-item:last-child { border-bottom: none; }
+    .about-de { margin-top: 2.5rem; }
+    .about-de p { color: var(--muted); line-height: 1.8; margin-bottom: 0.8rem; }
+    .about-de p:last-child { margin-bottom: 0; }
+    .about-de p strong { color: var(--text); }
     .about-card-item span:first-child { color: var(--muted); }
-    .about-card-item span:last-child { color: var(--text); font-weight: 600; }
+    .about-card-item { gap: 1rem; }
+    .about-card-item span:first-child { flex-shrink: 0; }
+    .about-card-item span:last-child { color: var(--text); font-weight: 600; text-align: right; }
 
     /* ── TIMELINE ── */
     .timeline { position: relative; padding-left: 1.8rem; }
@@ -178,6 +225,8 @@
     .tl-years { margin-left: auto; color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
     .tl-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 0.6rem; }
     .tl-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tl-list { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin: 0 0 0.8rem 1.1rem; }
+    .tl-list li { margin-bottom: 0.35rem; }
 
     /* ── VIZ EMBED ── */
     .viz-container { width: 100%; overflow: hidden; position: relative; border-radius: 10px; border: 1px solid var(--border); margin-top: 1.8rem; background: #0d1b33; }
@@ -303,8 +352,9 @@
   <ul class="nav-links">
     <li><a href="#projects">Projects</a></li>
     <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experience</a></li>
     <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#de" lang="de">Deutsch</a></li>
   </ul>
   <button class="nav-chat-btn" onclick="toggleChat()">💬 Ask AI</button>
 </nav>
@@ -313,23 +363,30 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-pills">
-      <span class="hero-pill pill-active">Data Engineer</span>
-      <span class="hero-pill">AI Builder</span>
-      <span class="hero-pill">Analytics Engineer</span>
-      <span class="hero-pill">Data Analyst</span>
+      <span class="hero-pill pill-active">Analytics Engineer</span>
+      <span class="hero-pill">Data Engineer</span>
+      <span class="hero-pill">BI Developer</span>
+      <span class="hero-pill">AI Automation</span>
     </div>
-    <h1>Ibryam Faik<br><span>Data & AI Engineer</span></h1>
+    <h1>Ibryam Faik<br><span>Analytics Engineer</span></h1>
     <p class="hero-sub">
-      5+ years turning complex data into decisions that matter —
-      from financial reporting at Experian to automated pipelines, live dashboards,
-      and AI-driven tools at UKG.<br>
-      I bridge raw data, modern engineering, and LLM-powered automation.
+      5+ years in data — I build SQL data models and scheduled transformation workflows
+      in BigQuery and Dataform that feed production dashboards for internal teams and customers
+      at UKG, and I automate the rest with Python and AI.
     </p>
     <div class="hero-cta">
-      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="assets/Ibryam-Faik-Analytics-Engineer-CV.pdf" download class="btn btn-primary">Download CV</a>
       <button class="btn btn-gold" onclick="toggleChat()">💬 Ask my AI</button>
       <a href="https://www.linkedin.com/in/ibryam" target="_blank" class="btn btn-outline">LinkedIn</a>
     </div>
+
+    <ul class="quick-facts" aria-label="Quick facts for recruiters">
+      <li><span>Work permit</span>EU citizen — none needed in DE / AT, Swiss permit via EU free movement</li>
+      <li><span>Availability</span>4 weeks' notice</li>
+      <li><span>Relocation</span>Ready to move to Germany, Austria or Switzerland</li>
+      <li><span>Languages</span>English C1/C2 · German B1 (certified)</li>
+      <li><span>Work mode</span>On-site · hybrid · remote</li>
+    </ul>
 
     <div class="hero-logos">
       <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/tableau.svg" alt="Tableau" title="Tableau">
@@ -340,8 +397,9 @@
       <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/githubactions.svg" alt="GitHub Actions" title="GitHub Actions">
       <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/googlegemini.svg" alt="Gemini" title="Google Gemini">
       <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pandas/pandas-original.svg" alt="Pandas" title="Pandas">
-      <span class="logo-text-badge" title="LangChain">LangChain</span>
+      <span class="logo-text-badge" title="Dataform">Dataform</span>
       <span class="logo-text-badge" title="Alteryx">Alteryx</span>
+      <span class="logo-text-badge" title="Claude API">Claude</span>
       <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/jira.svg" alt="Jira" title="Jira">
       <span class="logo-text-badge" title="FastAPI">FastAPI</span>
     </div>
@@ -351,11 +409,11 @@
 <!-- STATS BAR -->
 <div class="stats">
   <div class="stats-inner">
-    <div><div class="stat-num">5+</div><div class="stat-label">Years Experience</div></div>
-    <div><div class="stat-num">2</div><div class="stat-label">Live Dashboards</div></div>
-    <div><div class="stat-num">27+</div><div class="stat-label">Automated Data Tests</div></div>
-    <div><div class="stat-num">3</div><div class="stat-label">Data Sources per Project</div></div>
-    <div><div class="stat-num">0 CHF</div><div class="stat-label">Infrastructure Cost</div></div>
+    <div><div class="stat-num">5+</div><div class="stat-label">Years in Data</div></div>
+    <div><div class="stat-num">5+</div><div class="stat-label">Years of Tableau</div></div>
+    <div><div class="stat-num">B1</div><div class="stat-label">German, certified</div></div>
+    <div><div class="stat-num">2</div><div class="stat-label">Certifications · dbt · Alteryx</div></div>
+    <div><div class="stat-num">3</div><div class="stat-label">Live portfolio projects</div></div>
   </div>
 </div>
 
@@ -365,8 +423,8 @@
     <div class="section-label">Portfolio</div>
     <h2 class="section-title">End-to-End Data Projects</h2>
     <p class="section-desc">
-      Each project is fully automated — data is collected, processed, tested, and published without manual steps.
-      All source code is public on GitHub.
+      Personal projects built with the same stack I use at work — automated ingestion, modelled and
+      tested in BigQuery, published without manual steps. All source code is public on GitHub.
     </p>
 
     <div class="projects-grid">
@@ -447,6 +505,38 @@
         </div>
       </div>
 
+      <!-- AI Career Chatbot -->
+      <div class="project-card" style="--accent: #E8A838;">
+        <div class="project-header">
+          <div><div class="project-title">AI Career Chatbot</div></div>
+          <div class="project-links">
+            <button class="project-link link-dashboard" style="border:none;cursor:pointer;font-family:inherit;" onclick="toggleChat()">Try it ↗</button>
+            <a href="https://github.com/ibryam/ibryam-portfolio" target="_blank" class="project-link link-github">GitHub</a>
+          </div>
+        </div>
+        <p class="project-summary">
+          You can talk to it right now — the assistant in the corner of this page answers recruiters'
+          questions about my experience, availability and fit for a role, grounded only in my real profile.
+        </p>
+        <p class="project-what">
+          A Claude-powered agent with tool use retrieves context from my documents (RAG), looks up curated
+          HR answers, flags questions it can't answer, and sends me a Telegram summary of every conversation.
+          Paste a job description and it produces a structured match analysis.
+        </p>
+        <div class="project-highlights">
+          <div class="highlight"><div class="highlight-val">4</div><div class="highlight-label">Agent tools (lead capture, FAQ search…)</div></div>
+          <div class="highlight"><div class="highlight-val">RAG</div><div class="highlight-label">Grounded in my own documents</div></div>
+          <div class="highlight"><div class="highlight-val">2 LLMs</div><div class="highlight-label">Agent + independent quality evaluator</div></div>
+          <div class="highlight"><div class="highlight-val">Any language</div><div class="highlight-label">Answers in the visitor's language</div></div>
+        </div>
+        <div class="tech-stack">
+          <span class="tech-badge">Claude API</span><span class="tech-badge">Python</span>
+          <span class="tech-badge">FastAPI</span><span class="tech-badge">ChromaDB</span>
+          <span class="tech-badge">SQLite FTS5</span><span class="tech-badge">Docker · HuggingFace</span>
+          <span class="tech-badge">Telegram API</span>
+        </div>
+      </div>
+
 
     </div>
   </div>
@@ -457,20 +547,22 @@
   <div class="section-inner">
     <div class="section-label">Expertise</div>
     <h2 class="section-title">Technical Skills</h2>
-    <p class="section-desc">From cloud data pipelines to agentic AI systems — the full stack.</p>
+    <p class="section-desc">From SQL data models and data quality to dashboards and AI automation.</p>
 
     <div class="skills-grid">
       <div class="skill-group">
-        <div class="skill-group-title">Data Engineering</div>
-        <div class="skill-item">dbt Core (data modelling)</div>
-        <div class="skill-item">Google BigQuery</div>
-        <div class="skill-item">SQL (advanced)</div>
-        <div class="skill-item">Pipeline architecture</div>
-        <div class="skill-item">Data quality testing</div>
+        <div class="skill-group-title">Analytics Engineering</div>
+        <div class="skill-item">SQL (advanced) · BigQuery</div>
+        <div class="skill-item">Dataform · dbt Fundamentals ✓</div>
+        <div class="skill-item">Star &amp; snowflake modelling</div>
+        <div class="skill-item">Query optimisation</div>
+        <div class="skill-item">Row-level security</div>
+        <div class="skill-item">Data quality tests &amp; reconciliation</div>
+        <div class="skill-item">PostgreSQL · Oracle</div>
       </div>
       <div class="skill-group">
         <div class="skill-group-title">AI & LLM Engineering</div>
-        <div class="skill-item">Gemini / OpenAI / Claude APIs</div>
+        <div class="skill-item">Claude / Gemini / OpenAI APIs</div>
         <div class="skill-item">RAG (ChromaDB, LangChain)</div>
         <div class="skill-item">Agentic tool use</div>
         <div class="skill-item">LangGraph (agent loops)</div>
@@ -494,11 +586,12 @@
       </div>
       <div class="skill-group">
         <div class="skill-group-title">Visualisation & BI</div>
-        <div class="skill-item">Tableau (Desktop + Public)</div>
-        <div class="skill-item">Dashboard design</div>
-        <div class="skill-item">KPI reporting</div>
+        <div class="skill-item">Tableau (5+ years)</div>
+        <div class="skill-item">Dashboard design &amp; KPI reporting</div>
+        <div class="skill-item">Report usage monitoring</div>
         <div class="skill-item">Financial data analysis</div>
         <div class="skill-item">Alteryx Designer Core ✓</div>
+        <div class="skill-item">Jira · Confluence · Scrum</div>
       </div>
     </div>
   </div>
@@ -512,42 +605,63 @@
     <div class="about-grid">
       <div class="about-text">
         <p>
-          I am a <strong>Senior Data Analyst at UKG</strong> with over 5 years of experience in data
-          engineering, visualisation, and AI-driven automation. My background spans financial services
-          (Experian) and enterprise software (UKG), giving me strong domain knowledge alongside
-          technical depth.
+          I am a <strong>Senior Business Data Analyst at UKG</strong> doing analytics engineering:
+          SQL data models and scheduled, dependency-managed workflows in <strong>BigQuery and Dataform</strong>
+          that feed production dashboards for internal teams and customers. Over 5 years in data, across
+          enterprise software (UKG), financial services (Experian) and sales (Dell Technologies).
         </p>
         <p>
-          I specialise in <strong>BigQuery, dbt, Tableau, and Python</strong> for data engineering,
-          and increasingly in <strong>LLM-powered tools</strong> — building agentic workflows, RAG systems,
-          and AI pipelines using Gemini, Claude, and open-source models.
+          I care about data people can trust — modelling, validation, reconciliation and clear documentation
+          (endorsed on every project for it). I also lead <strong>AI automation projects</strong> in Python
+          with Claude and Gemini, and built the AI assistant on this page.
         </p>
         <p>
-          I am targeting a move to the <strong>DACH region</strong> (Germany, Austria, Switzerland).
-          I have family in Geneva and my uncle lives in Oberstdorf, Germany — relocation logistics are
-          in place. As an EU citizen there are no permit barriers. German B1 expected by June 2026.
+          I am based in Bulgaria and <strong>ready to relocate to Germany, Austria or Switzerland</strong>.
+          I have relatives in Geneva and in Oberstdorf (Germany), so the move is simple. As an EU citizen I
+          need no work permit in Germany or Austria and can get a Swiss permit under EU free movement.
+          My German is <strong>B1, certified</strong>.
         </p>
         <div class="about-tags">
-          <span class="about-tag">Tableau 4+ yrs</span>
-          <span class="about-tag">dbt · BigQuery</span>
-          <span class="about-tag">Python · SQL</span>
-          <span class="about-tag">Gemini · Claude APIs</span>
-          <span class="about-tag">Alteryx Certified</span>
-          <span class="about-tag">DACH target</span>
+          <span class="about-tag">BigQuery · Dataform · dbt</span>
+          <span class="about-tag">SQL · Python</span>
+          <span class="about-tag">Tableau 5+ yrs</span>
+          <span class="about-tag">Claude · Gemini APIs</span>
+          <span class="about-tag">dbt &amp; Alteryx certified</span>
+          <span class="about-tag">German B1</span>
         </div>
       </div>
       <div class="about-card">
         <div class="about-card-title">At a Glance</div>
-        <div class="about-card-item"><span>Current role</span><span>Senior Data Analyst · UKG</span></div>
-        <div class="about-card-item"><span>Tableau</span><span>4+ years</span></div>
-        <div class="about-card-item"><span>Stack</span><span>BigQuery · dbt · Python · SQL</span></div>
-        <div class="about-card-item"><span>AI experience</span><span>Gemini · OpenAI · Claude APIs</span></div>
-        <div class="about-card-item"><span>Certification</span><span>Alteryx Designer Core</span></div>
+        <div class="about-card-item"><span>Current role</span><span>Senior Business Data Analyst · UKG</span></div>
+        <div class="about-card-item"><span>Target roles</span><span>Analytics / Data Engineer · BI</span></div>
+        <div class="about-card-item"><span>Stack</span><span>BigQuery · Dataform · dbt · SQL · Python</span></div>
+        <div class="about-card-item"><span>Tableau</span><span>5+ years</span></div>
+        <div class="about-card-item"><span>Certifications</span><span>dbt Fundamentals · Alteryx Core</span></div>
         <div class="about-card-item"><span>English</span><span>C1/C2</span></div>
-        <div class="about-card-item"><span>German</span><span>A1/A2 · B1 target June 2026</span></div>
+        <div class="about-card-item"><span>German</span><span>B1 (certified)</span></div>
         <div class="about-card-item"><span>Other languages</span><span>Bulgarian (native) · Turkish B2</span></div>
-        <div class="about-card-item"><span>Location goal</span><span>DACH region · EU citizen</span></div>
+        <div class="about-card-item"><span>Based in</span><span>Bulgaria · EU citizen</span></div>
+        <div class="about-card-item"><span>Relocation</span><span>Germany · Austria · Switzerland</span></div>
+        <div class="about-card-item"><span>Notice period</span><span>4 weeks</span></div>
       </div>
+    </div>
+
+    <div class="about-card about-de" id="de" lang="de">
+      <div class="about-card-title">Kurzprofil auf Deutsch</div>
+      <p>
+        Ich bin <strong>Analytics Engineer</strong> mit über 5 Jahren Erfahrung im Datenbereich. Bei UKG
+        (offizieller Titel: Senior Business Data Analyst) entwickle ich SQL-Datenmodelle und automatisierte
+        Transformations-Workflows in <strong>Google BigQuery und Dataform</strong>, die produktive Dashboards
+        für interne Teams und Kunden versorgen. Meine Stärken sind Datenmodellierung, Datenqualität, Tableau
+        und KI-Automatisierung mit Python.
+      </p>
+      <p>
+        Ich wohne in Bulgarien und bin bereit, nach <strong>Deutschland, Österreich oder in die Schweiz</strong>
+        umzuziehen. Als EU-Bürger brauche ich in Deutschland und Österreich keine Arbeitserlaubnis; in der
+        Schweiz erhalte ich eine Bewilligung über das Freizügigkeitsabkommen. Kündigungsfrist: 4 Wochen.
+        Sprachen: Deutsch <strong>B1 (zertifiziert)</strong>, Englisch C1/C2.
+      </p>
+      <p>Haben Sie Fragen? Mein KI-Assistent unten rechts antwortet auch auf Deutsch.</p>
     </div>
   </div>
 </section>
@@ -563,15 +677,21 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="tl-header">
-            <span class="tl-role">Senior Data Analyst</span>
+            <span class="tl-role">Senior Business Data Analyst</span>
             <span class="tl-company">UKG</span>
             <span class="tl-years">Jul 2022 – Present</span>
           </div>
-          <p class="tl-desc">Tableau dashboards for operational KPIs; advanced SQL on BigQuery; led AI projects using Gemini, Claude, and OpenAI for automated dataset summarisation.</p>
+          <ul class="tl-list">
+            <li>Build and maintain SQL data models and scheduled transformation workflows in BigQuery and Dataform (star and snowflake schemas) feeding production dashboards for internal teams and customers.</li>
+            <li>Rescued a crashing, data-heavy customer report: reverse-engineered its logic, moved it from Tableau into BigQuery SQL, reduced data volume and cached results — validated against the original.</li>
+            <li>Implemented customer- and country-level row-level security for an operations team using user attributes and rule-based access.</li>
+            <li>Built usage monitoring on self-service reports to prioritise development by what users actually need.</li>
+            <li>Led AI-enabled Python projects with data engineers (Claude, Gemini), e.g. consolidating reports and tickets into summaries of past events and lessons learned.</li>
+          </ul>
           <div class="tl-tools">
-            <span class="tech-badge">Tableau</span><span class="tech-badge">SQL</span>
-            <span class="tech-badge">Python</span><span class="tech-badge">BigQuery</span>
-            <span class="tech-badge">dbt</span><span class="tech-badge">Gemini/Claude APIs</span>
+            <span class="tech-badge">BigQuery</span><span class="tech-badge">Dataform</span>
+            <span class="tech-badge">SQL</span><span class="tech-badge">Tableau</span>
+            <span class="tech-badge">Python</span><span class="tech-badge">Claude/Gemini APIs</span>
             <span class="tech-badge">Jira · Confluence</span>
           </div>
         </div>
@@ -643,8 +763,11 @@
     <a href="https://github.com/ibryam" target="_blank">GitHub</a>
     <a href="https://public.tableau.com/app/profile/ibryam" target="_blank">Tableau Public</a>
     <a href="mailto:ibryamfibryam@gmail.com">ibryamfibryam@gmail.com</a>
+    <a href="tel:+359877763362">+359 877 763 362 (BG)</a>
+    <a href="tel:+41227967783">+41 22 796 77 83 (CH)</a>
+    <a href="assets/Ibryam-Faik-Analytics-Engineer-CV.pdf" download>Download CV (PDF)</a>
   </div>
-  <p class="footer-copy">Ibryam Faik · Data &amp; AI Engineer · Hosted on Cloudflare Pages</p>
+  <p class="footer-copy">Ibryam Faik · Analytics Engineer · Hosted on Cloudflare Pages</p>
 </footer>
 
 <!-- ── CHAT WIDGET ── -->
@@ -665,6 +788,7 @@
       <span class="chat-suggestion" onclick="sendSuggestion(this)">Tell me about the AI projects</span>
       <span class="chat-suggestion" onclick="sendSuggestion(this)">Are you open to relocation?</span>
       <span class="chat-suggestion" onclick="sendSuggestion(this)">What's your notice period?</span>
+      <span class="chat-suggestion" onclick="sendSuggestion(this)" lang="de">Wie gut ist sein Deutsch?</span>
     </div>
   </div>
   <div id="chat-jd-cta">
