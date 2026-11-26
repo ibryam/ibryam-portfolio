@@ -1,3 +1,4 @@
+import html
 import json
 import os
 import queue
@@ -9,6 +10,7 @@ from memory import save_lead, search_faq, get_recent_history, save_unknown_quest
 load_dotenv(override=True)
 
 _TELEGRAM_API = "https://api.telegram.org/bot"
+_TELEGRAM_MAX_BODY = 3900  # Telegram rejects messages over 4096 chars; leaves room for title + escaping
 
 
 # ── Telegram ──────────────────────────────────────────────────────────────────
@@ -19,7 +21,10 @@ def _telegram(title: str, message: str) -> None:
     if not token or not chat_id:
         print(f"[telegram] disabled — {title}: {message}")
         return
-    text = f"<b>{title}</b>\n{message}"
+    body = html.escape(message)
+    if len(body) > _TELEGRAM_MAX_BODY:
+        body = body[:_TELEGRAM_MAX_BODY] + "\n… (truncated)"
+    text = f"<b>{html.escape(title)}</b>\n{body}"
     for attempt in range(2):
         try:
             r = requests.post(

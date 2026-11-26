@@ -228,3 +228,45 @@ def save_lead(session_id: str, email: str, name: str = "", notes: str = "") -> N
             (session_id, name, email, notes),
         )
     conn.close()
+
+
+# ── Conversation summaries ───────────────────────────────────────────────────
+
+def get_conversation(session_id: str) -> list[dict]:
+    conn = get_connection()
+    rows = conn.execute(
+        "SELECT role, content FROM conversations WHERE session_id = ? ORDER BY id",
+        (session_id,),
+    ).fetchall()
+    conn.close()
+    return [{"role": r["role"], "content": r["content"]} for r in rows]
+
+
+def get_session_lead(session_id: str) -> dict | None:
+    conn = get_connection()
+    row = conn.execute(
+        "SELECT name, email FROM leads WHERE session_id = ? ORDER BY id DESC LIMIT 1",
+        (session_id,),
+    ).fetchone()
+    conn.close()
+    return {"name": row["name"], "email": row["email"]} if row else None
+
+
+def count_session_unknown_questions(session_id: str) -> int:
+    conn = get_connection()
+    row = conn.execute(
+        "SELECT COUNT(*) FROM unknown_questions WHERE session_id = ?", (session_id,)
+    ).fetchone()
+    conn.close()
+    return row[0]
+
+
+def get_location_for_ip(ip: str) -> str:
+    conn = get_connection()
+    row = conn.execute(
+        "SELECT city, region, country FROM visits WHERE ip = ? ORDER BY id DESC LIMIT 1", (ip,)
+    ).fetchone()
+    conn.close()
+    if not row:
+        return "Unknown"
+    return ", ".join(filter(None, [row["city"], row["region"], row["country"]]))

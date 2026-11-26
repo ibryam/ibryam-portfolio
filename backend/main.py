@@ -1,4 +1,5 @@
 import asyncio
+import time
 import uuid
 from contextlib import asynccontextmanager
 
@@ -12,9 +13,75 @@ load_dotenv(override=True)
 
 from agent import chat as agent_chat
 from evaluator import evaluate
-from memory import init_db, get_unknown_questions, mark_question_answered, save_visit, was_ip_seen_recently, get_daily_stats
+from memory import (
+    init_db, get_unknown_questions, mark_question_answered, save_visit, was_ip_seen_recently, get_daily_stats,
+    get_conversation, get_session_lead, count_session_unknown_questions, get_location_for_ip,
+)
 from rag import init_rag
-from tools import _telegram
+from tools import _telegram, _notify
+
+
+# ── Conversation summaries: one Telegram message per conversation, sent once it goes quiet ──
+
+_SUMMARY_IDLE_SECONDS = 180
+_SUMMARY_ANSWER_CHARS = 400
+_active_sessions: dict[str, tuple[float, str]] = {}  # session_id -> (last activity, client ip)
+_reported_counts: dict[str, int] = {}  # session_id -> messages already sent in a summary
+
+
+def _client_ip(request: Request) -> str:
+    return (
+        request.headers.get("CF-Connecting-IP")
+        or request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+        or (request.client.host if request.client else "unknown")
+    )
+
+
+def _format_transcript(messages: list[dict]) -> str:
+    lines = []
+    for m in messages:
+        if m["role"] == "user":
+            lines.append(f"\n🧑 {m['content']}")
+        else:
+            answer = m["content"]
+            if len(answer) > _SUMMARY_ANSWER_CHARS:
+                answer = answer[:_SUMMARY_ANSWER_CHARS] + "…"
+            lines.append(f"🤖 {answer}")
+    return "\n".join(lines)
+
+
+def _send_summary(session_id: str, ip: str) -> None:
+    messages = get_conversation(session_id)
+    already_sent = _reported_counts.get(session_id, 0)
+    new_messages = messages[already_sent:]
+    if not new_messages:
+        return
+    _reported_counts[session_id] = len(messages)
+
+    lead = get_session_lead(session_id)
+    contact = f"{lead['name']} <{lead['email']}>" if lead else "no email left"
+    questions = sum(1 for m in new_messages if m["role"] == "user")
+    title = "ibryam.com — Conversation" + (" (continued)" if already_sent else "")
+    header = (
+        f"📍 {get_location_for_ip(ip)}\n"
+        f"📧 {contact}\n"
+        f"💬 {questions} question(s), {count_session_unknown_questions(session_id)} unknown\n"
+        f"Session: {session_id[:8]}"
+    )
+    _notify(title, header + "\n" + _format_transcript(new_messages))
+
+
+async def _summary_loop() -> None:
+    while True:
+        await asyncio.sleep(30)
+        now = time.monotonic()
+        idle = [sid for sid, (ts, _) in _active_sessions.items() if now - ts >= _SUMMARY_IDLE_SECONDS]
+        for sid in idle:
+            _, ip = _active_sessions.pop(sid)
+            try:
+                await asyncio.to_thread(_send_summary, sid, ip)
+            except Exception as e:
+                print(f"[summary] failed for {sid[:8]}: {e}")
 
 
 @asynccontextmanager
@@ -27,7 +94,9 @@ async def lifespan(app: FastAPI):
     from rag import retrieve_context
     retrieve_context("data engineer experience skills")
     print("[startup] ready.")
+    summary_task = asyncio.create_task(_summary_loop())
     yield
+    summary_task.cancel()
 
 
 app = FastAPI(title="Ibryam AI Chatbot", lifespan=lifespan)
@@ -68,11 +137,7 @@ async def health():
 @app.post("/visit")
 async def record_visit(request: Request, background_tasks: BackgroundTasks, body: dict = {}):
     session_id = body.get("session_id", "")
-    ip = (
-        request.headers.get("CF-Connecting-IP")
-        or request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
-        or (request.client.host if request.client else "unknown")
-    )
+    ip = _client_ip(request)
 
     if was_ip_seen_recently(ip, minutes=60):
         return {"status": "already_seen"}
@@ -142,7 +207,7 @@ def _run_evaluator(message: str, rag_chunks: list, reply: str) -> None:
 
 
 @app.post("/chat", response_model=ChatResponse)
-async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
+async def chat(req: ChatRequest, request: Request, background_tasks: BackgroundTasks):
     if not req.message.strip():
         raise HTTPException(status_code=400, detail="message cannot be empty")
 
@@ -153,6 +218,8 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
         session_id=session_id,
         history=req.history,
     )
+
+    _active_sessions[session_id] = (time.monotonic(), _client_ip(request))
 
     # Evaluator runs after response is returned — zero added latency
     background_tasks.add_task(_run_evaluator, req.message, rag_chunks, reply)
