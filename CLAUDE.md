@@ -5,8 +5,8 @@ This file provides guidance to Claude Code when working in this repository.
 ## Project Overview
 
 **Name:** ibryam-portfolio
-**Purpose:** Personal portfolio site at ibryam.com + AI career chatbot that acts as Ibryam Faik's representative to HR recruiters
-**Stack:** Python · FastAPI · Gemini 2.5 Flash · Groq (llama-3.3-70b) · ChromaDB · SQLite · Vanilla HTML/CSS/JS · HuggingFace Spaces · Cloudflare Pages
+**Purpose:** Personal portfolio site at ibryam.com + AI career chatbot that acts as Ibryam Faik's assistant for HR recruiters
+**Stack:** Python · FastAPI · Claude Sonnet 5 (Anthropic SDK) · Gemini/Groq evaluator · ChromaDB · SQLite · Telegram · Vanilla HTML/CSS/JS · HuggingFace Spaces · Cloudflare Pages
 
 ## Quick Start
 
@@ -17,8 +17,7 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r ..\requirements.txt
 
-# Copy and fill in API keys
-cp .env.example .env
+# Create backend/.env with the keys listed below
 
 # Run locally (auto-inits DB + RAG on first run)
 uvicorn main:app --reload --port 8000
@@ -31,89 +30,95 @@ uvicorn main:app --reload --port 8000
 
 ```
 Recruiter → Custom chat widget (frontend/index.html)
-                │ POST /chat
+                │ POST /visit (on chat open), POST /chat
                 ▼
-          FastAPI (backend/main.py)
+          FastAPI (backend/main.py) ── idle-conversation summary loop → Telegram
                 │
-          ┌─────┴──────┐
-     agent.py          evaluator.py
-   (Gemini 2.5 Flash)  (Groq llama-3.3-70b)
-          │                    │
-    ┌─────┴─────┐         APPROVED/REJECTED
-   rag.py    tools.py     (retry on reject)
+          ┌─────┴──────────────┐
+     agent.py              evaluator.py (background, log-only)
+   (Claude Sonnet 5)       (Gemini → Groq fallback)
+          │
+    ┌─────┴─────┐
+   rag.py    tools.py ── instant Telegram alerts (new contact, unknown question)
   (ChromaDB)  (4 tools)
           │
       memory.py (SQLite)
 ```
 
 **Agent tools (tools.py):**
-- `record_user_details` — saves lead to SQLite + Pushover notification
-- `record_unknown_question` — Pushover alert for unanswerable questions
-- `faq_lookup` — FTS5 full-text search over 30 curated Q&A pairs
+- `record_user_details` — saves lead to SQLite + Telegram alert
+- `record_unknown_question` — saves to SQLite + Telegram alert
+- `faq_lookup` — FTS5 full-text search over curated Q&A (seeded from knowledge_base/faq.md)
 - `get_session_context` — retrieves recent conversation history from SQLite
 
-**RAG flow:** On each chat request, `rag.py` retrieves top-5 ChromaDB chunks (score ≥ 0.25) from knowledge_base/ + LinkedIn PDF. Chunks are injected into Gemini's system prompt as extra context.
+**RAG flow:** `rag.py` retrieves top-5 ChromaDB chunks (score ≥ 0.25) from knowledge_base/ + LinkedIn PDF. They are sent as a second system block after the cached static prompt (profile + instructions).
 
-**Evaluator flow:** After agent response, Groq evaluates APPROVED/REJECTED. On rejection, agent is called again with a hint. Always returns a response (fail-open).
+**Evaluator flow:** Runs as a FastAPI background task after the response is returned; REJECTED verdicts are only logged. Fail-open.
+
+**Telegram flow:** `main.py` tracks active sessions in memory; after 3 min idle it sends one summary per conversation (location, contact, full Q&A). Returning visitors get a "(continued)" message with only new messages.
 
 ## Environment Variables
 
 ```
-GOOGLE_API_KEY     — Google AI Studio key (gemini-2.5-flash, free tier)
-GROQ_API_KEY       — Groq key (llama-3.3-70b-versatile evaluator, free tier)
-PUSHOVER_TOKEN     — Pushover app token (agentic notifications)
-PUSHOVER_USER      — Pushover user key
-BACKEND_URL        — Full URL of deployed backend (set in frontend JS)
-GEMINI_MODEL       — Override Gemini model (default: gemini-2.5-flash)
-GROQ_MODEL         — Override Groq model (default: llama-3.3-70b-versatile)
+ANTHROPIC_API_KEY  — Claude API key (agent)
+AGENT_MODEL        — Override agent model (default: claude-sonnet-5)
+GOOGLE_API_KEY     — Gemini key for the evaluator
+GROQ_API_KEY       — Groq key, evaluator fallback
+GEMINI_EVAL_MODEL  — default: gemini-2.0-flash
+GROQ_EVAL_MODEL    — default: llama-3.1-8b-instant
+TELEGRAM_TOKEN     — Telegram bot token
+TELEGRAM_CHAT_ID   — Telegram chat that receives notifications
+SHOW_PLAN          — "true" adds a visible plan to replies (default: false)
 DB_PATH            — SQLite file path (default: ibryam_chat.db)
 KB_DIR             — Knowledge base directory (default: ./knowledge_base)
 VECTOR_STORE_DIR   — ChromaDB persist dir (default: ./vector_store)
 LINKEDIN_PDF       — Path to LinkedIn PDF (default: ./me/linkedin.pdf)
+EMBED_MODEL, TOP_K, SCORE_THRESHOLD — RAG tuning
 ```
 
-Copy `.env.example` → `.env` before running locally.
+`BACKEND_URL` is a constant in `frontend/index.html`, not an env var.
 
 ## File Structure
 
 ```
 backend/
-  main.py          — FastAPI app, startup lifecycle, /chat orchestration
-  agent.py         — Gemini agent loop, system prompt, tool dispatch
-  evaluator.py     — Groq evaluator (APPROVED/REJECTED)
+  main.py          — FastAPI app, startup lifecycle, /chat, /visit, admin endpoints, Telegram summaries
+  agent.py         — Claude agent loop, system prompt, tool dispatch
+  evaluator.py     — Gemini/Groq evaluator (APPROVED/REJECTED, log-only)
   rag.py           — ChromaDB init, ingest, retrieve_context()
-  memory.py        — SQLite: conversations, FAQ FTS5, leads
-  tools.py         — Tool functions + Gemini function-call schemas
+  memory.py        — SQLite: conversations, FAQ FTS5, leads, visits, unknown questions
+  tools.py         — Tool functions + schemas, Telegram sender + queue worker
   knowledge_base/  — profile.md, projects.md, experience.md, faq.md
   me/              — linkedin.pdf (gitignored)
   vector_store/    — ChromaDB data (gitignored)
-  Dockerfile       — for HuggingFace Spaces deployment
+  Dockerfile       — for HuggingFace Spaces deployment (uses root requirements.txt)
 frontend/
   index.html       — Portfolio + floating chat widget
 ```
 
 ## Non-obvious Patterns
 
-- **RAG is injected twice:** `agent.py` calls `retrieve_context()` for the system prompt; `main.py` also calls it for the evaluator. This is intentional — both need the same context but use it differently.
-- **Gemini function-calling format:** Uses `genai.protos.FunctionDeclaration` / `genai.protos.Tool` — NOT the OpenAI format. Don't mix patterns.
-- **Fail-open evaluator:** `evaluator.py` returns APPROVED on any exception — never block the user due to Groq being unavailable.
-- **SQLite thread safety:** `get_connection()` uses `check_same_thread=False` because FastAPI runs in async context. This is safe for read-heavy workloads; don't do long write transactions.
-- **Vector store init:** First run downloads ~90MB sentence-transformers model. On HF Spaces this happens once at container startup. Subsequent runs load from cache.
+- **Tool schemas:** `tools.py` keeps schemas with a `parameters` key; `agent.py` maps them to Anthropic's `input_schema` format.
+- **Prompt caching:** the static system prompt is the first block with `cache_control`; keep anything per-request (RAG chunks, timestamps) out of it or caching breaks.
+- **Chat widget renders only `**bold**` and line breaks:** the system prompt forbids headings/tables/italics; keep it that way unless `renderMarkdown()` in index.html is extended.
+- **Telegram messages are HTML-escaped and truncated in `_telegram()`:** unescaped `<`, `>`, `&` or >4096 chars make Telegram reject the message.
+- **Pending summaries live in memory:** a Space restart drops summaries for conversations that haven't gone idle yet.
+- **Fail-open evaluator:** `evaluator.py` returns APPROVED on any exception.
+- **SQLite thread safety:** `get_connection()` uses `check_same_thread=False`; don't do long write transactions.
+- **Vector store init:** First run downloads ~90MB sentence-transformers model at container startup.
 - **CORS:** `"null"` is included in allow_origins to support local `file://` testing of index.html.
-- **faq_lookup FTS5:** SQLite FTS5 uses simple tokenizer. Queries with special characters need escaping — the current `search_faq()` passes query directly; avoid quotes in queries.
+- **faq_lookup FTS5:** simple tokenizer; `search_faq()` passes the query directly — avoid quotes in queries.
 
 ## Deployment
 
 **Backend → HuggingFace Spaces (Docker):**
-- Create Space: type=Docker, visibility=Public
-- Push `backend/` contents to Space repo
-- Add secrets: GOOGLE_API_KEY, GROQ_API_KEY, PUSHOVER_TOKEN, PUSHOVER_USER
-- Space URL: `https://ibryam-chatbot.hf.space`
+- Space: `ibryam/ibryam-chatbot`, URL `https://ibryam-ibryam-chatbot.hf.space`
+- Deploy: `git push space master:main` (auth via Windows Credential Manager, user `ibryam` + HF write token)
+- Secrets: ANTHROPIC_API_KEY, GOOGLE_API_KEY, GROQ_API_KEY, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
 
 **Frontend → Cloudflare Pages:**
-- Connect GitHub repo → Pages project → build: none (static HTML)
-- Custom domain: ibryam.com (Cloudflare DNS auto-configured)
-- Set `BACKEND_URL` constant in `frontend/index.html` to HF Space URL
+- Auto-deploys from GitHub `master` (static HTML, no build)
+- Custom domain: ibryam.com
 
 ## Rules
 

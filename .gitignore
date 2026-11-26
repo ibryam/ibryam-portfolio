@@ -22,3 +22,6 @@ __pycache__/
 *.pyc
 .venv/
 backend/requirements.txt
+
+# Local run logs
+*.log
