@@ -1,8 +1,30 @@
 # ibryam.com — Product Roadmap
 
-**Last updated:** 2026-06-12
+**Last updated:** 2026-11-26
 **Owner:** Ibryam Faik
-**Goal:** A 10/10 recruiter-facing portfolio — visually distinctive, fast, accessible, and an AI chatbot that feels like a premium product, not a demo.
+**Goal:** Get Ibryam hired as an Analytics Engineer (or Data Engineer / BI / AI automation) in Germany, Austria or Switzerland — via a recruiter-facing portfolio that is convincing first, then polished, with an AI chatbot that feels like a premium product.
+
+> **Start every session here:** read "Open items" below and consider them when planning any change. Items are only removed when done or when Ibryam drops them — never silently.
+
+## Open items — carry forward until resolved
+
+Updated 2026-11-26 after Phase H stages 1–3 shipped (`9520413`). Discuss with Ibryam before starting any of these.
+
+| # | Item | Waiting on | Notes |
+|---|------|-----------|-------|
+| O1 | **Add `SALARY_EXPECTATIONS` secret** on the HF Space | Ibryam | Text agreed 2026-11-26 (CH: CHF 90–130k; DE/AT: local market, no EUR figure). Never put the figure in the repo — it is public. |
+| O2 | **H.4 Quantified UKG impact** (2–4 numbers: hours saved, users, report load time before/after…) | Ibryam's numbers | Highest-value remaining content change; then update hero stats, Experience, `experience.md`, CV. |
+| O3 | **H.6 German CV** (PDF) + "Lebenslauf (DE)" download | Ibryam (review) | Draft from the EN CV; Ibryam reviews German before publish. |
+| O4 | **H.8 LinkedIn preview check** via Post Inspector | Ibryam | Tags + OG image are live. |
+| O5 | **H.9 Market-gap tally** — ~20 DACH job ads, count required tools | — | Live bot already flagged "Snowflake?" as unknown; likely gaps: Azure, Databricks, Snowflake, Power BI, Airflow. Pick one to close (project or cert). |
+| O6 | **H.10 Social proof** — 1–2 colleague/manager quotes (with permission), booking link | Ibryam | |
+| O7 | Cloudflare managed robots.txt overrides `frontend/robots.txt` | Decision | Either disable it in Cloudflare or submit `sitemap.xml` in Google Search Console. |
+| O8 | Old `OPENAI_API_KEY` secret on the Space is unused | Ibryam | Delete it and revoke the key at OpenAI. |
+| O9 | Phase 0 leftovers: 0.1 Tableau heights, 0.3 `_UNCERTAINTY` list, 0.4 history order by id, 0.5 FTS5 escaping, 0.8 nav-order whitespace change in index.html | — | Small bugs; good warm-up for the next session. |
+| O10 | Skills grid: 5th card ("Visualisation & BI") sits alone on its own row on desktop | — | Cosmetic; fold into Phase 1/2. |
+| O11 | Phase 3.3 (markdown renderer) conflicts with the current system-prompt rule "only **bold** + • bullets" | — | If 3.3 ships, relax that rule in `agent.py` at the same time. |
+| O12 | Pending summaries are held in memory; a Space restart drops them | — | Acceptable now; revisit in Phase 4 (persistence). |
+| O13 | Local commit `3718920` (docs only) not yet pushed | — | Push with the next change. |
 
 How to read this document:
 - Phases are ordered by dependency, not just priority. Phase 1 (design tokens) must land before Phase 2 (UI overhaul) because every Phase 2 step references token names.
