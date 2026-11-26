@@ -9,21 +9,21 @@ Rule: a box may only be ticked when its **AC** (acceptance criteria) is verifiab
 
 Items marked 🧑 need facts only Ibryam can provide.
 
-- [ ] **H.1 Answer the fact sheet** 🧑 — current title on payroll/LinkedIn, German level today (certificate?), French level, where you live now, earliest start date, target cities, salary range (CHF), 2–4 numbers from UKG work, CV PDF.
+- [x] **H.1 Answer the fact sheet** 🧑 — current title on payroll/LinkedIn, German level today (certificate?), French level, where you live now, earliest start date, target cities, salary range (CHF), 2–4 numbers from UKG work, CV PDF.
       **AC:** answers recorded in `backend/knowledge_base/profile.md`.
-- [ ] **H.2 Fix trust-breakers** — German date, title, location story, `projects.md` chatbot tech (now Claude Sonnet 5 / Cloudflare Pages), "ata professional" typo in `profile.md`.
+- [x] **H.2 Fix trust-breakers** — German date, title, location story, `projects.md` chatbot tech (now Claude Sonnet 5 / Cloudflare Pages), "ata professional" typo in `profile.md`.
       **AC:** grep for "June 2026", "gpt-4o-mini", "Cloudflare Workers" across `frontend/` + `knowledge_base/` returns nothing stale.
-- [ ] **H.3 Recruiter quick-facts strip** under the hero (authorisation · availability · locations · languages · work mode).
+- [x] **H.3 Recruiter quick-facts strip** under the hero (authorisation · availability · locations · languages · work mode).
       **AC:** visible without scrolling at 1366×768; all five facts present.
-- [ ] **H.4 Impact-led hero stats + UKG rewrite** (needs H.1 numbers).
+- [ ] **H.4 Impact-led hero stats + UKG rewrite** (needs H.1 numbers). *Partly done 2026-11-26: stats are credentials, UKG has 5 CV bullets; still no quantified outcomes — needs numbers from Ibryam.*
       **AC:** every hero stat is a business outcome or credential; UKG entry has 3–4 bullets, ≥ 2 quantified.
-- [ ] **H.5 AI Chatbot featured project card** (+ decision on ATS Skipper visibility/name).
+- [x] **H.5 AI Chatbot featured project card** (+ decision on ATS Skipper visibility/name).
       **AC:** card with architecture one-liner, stack, GitHub link, "try it" button opening the widget.
-- [ ] **H.6 CV PDF (EN + DE)** in `frontend/assets/` + download buttons (merges with 2.8).
+- [ ] **H.6 CV PDF (EN + DE)** in `frontend/assets/` + download buttons (merges with 2.8). *EN live 2026-11-26; German CV still to do.*
       **AC:** both PDFs download with proper filenames; facts match page.
-- [ ] **H.7 German layer** — DE hero/summary or `/de/` page; chat widget hint "Fragen Sie auf Deutsch".
+- [x] **H.7 German layer** — DE hero/summary or `/de/` page; chat widget hint "Fragen Sie auf Deutsch".
       **AC:** German text reviewed by a native speaker or tutor before publishing.
-- [ ] **H.8 SEO + link preview** (merges with 2.1/2.2) with DACH keywords.
+- [ ] **H.8 SEO + link preview** (merges with 2.1/2.2) with DACH keywords. *Tags, OG image, JSON-LD, sitemap live 2026-11-26; LinkedIn Post Inspector check pending.*
       **AC:** LinkedIn Post Inspector shows image, title, description.
 - [ ] **H.9 Market-gap decision** — scan ~20 target job ads (jobs.ch, LinkedIn CH/DE), tally required tools, choose one gap to close.
       **AC:** tally table in Review Notes; chosen project/cert added to Phase 5.
@@ -139,6 +139,8 @@ Items marked 🧑 need facts only Ibryam can provide.
 <!-- Move completed items here with date + commit hash -->
 - 2026-11-26 `ac0e441` Agent switched to Claude Sonnet 5 (`claude-sonnet-5`), prompt style fixes, 0.2 empty-RAG auto-flag removed
 - 2026-11-26 `8b99099` Telegram: one summary per conversation; HTML-escape + 4096-char guard (fixed silently dropped messages)
+- 2026-11-26 `0842af0` Chatbot knowledge synced with CV; salary moved to `SALARY_EXPECTATIONS` Space secret
+- 2026-11-26 `9520413` Site repositioned as Analytics Engineer: quick facts, CV download, chatbot card, German Kurzprofil, SEO/OG (H.1–H.3, H.5, H.7)
 - 2026-11-26 `621cc6a` 0.6 `*.log` gitignored; 0.7 CLAUDE.md rewritten for current stack
 
 ## Review Notes

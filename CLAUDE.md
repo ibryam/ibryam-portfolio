@@ -116,9 +116,12 @@ frontend/
 - Deploy: `git push space master:main` (auth via Windows Credential Manager, user `ibryam` + HF write token)
 - Secrets: ANTHROPIC_API_KEY, GOOGLE_API_KEY, GROQ_API_KEY, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
 
-**Frontend → Cloudflare Pages:**
-- Auto-deploys from GitHub `master` (static HTML, no build)
-- Custom domain: ibryam.com
+**Frontend → Cloudflare Worker (static assets):**
+- `wrangler.jsonc` serves the `frontend/` folder; Cloudflare builds automatically from GitHub `master`
+- A build can take 10–20 min to go live — check `<title>` on www.ibryam.com before assuming it failed
+- Custom domain: ibryam.com (→ www.ibryam.com)
+- Cloudflare's managed robots.txt overrides `frontend/robots.txt`
+- Salary range lives only in the `SALARY_EXPECTATIONS` Space secret (repo is public)
 
 ## Rules
 
