@@ -15,7 +15,7 @@ Items marked 🧑 need facts only Ibryam can provide.
       **AC:** grep for "June 2026", "gpt-4o-mini", "Cloudflare Workers" across `frontend/` + `knowledge_base/` returns nothing stale.
 - [x] **H.3 Recruiter quick-facts strip** under the hero (authorisation · availability · locations · languages · work mode).
       **AC:** visible without scrolling at 1366×768; all five facts present.
-- [ ] **H.4 Impact-led hero stats + UKG rewrite** (needs H.1 numbers). *Partly done 2026-11-26: stats are credentials, UKG has 5 CV bullets; still no quantified outcomes — needs numbers from Ibryam.*
+- [x] **H.4 Impact-led hero stats + UKG rewrite** (needs H.1 numbers). *Done 2026-11-28: 81 models · 170+ reports · ~€780k/yr in stats bar, Experience and chatbot.*
       **AC:** every hero stat is a business outcome or credential; UKG entry has 3–4 bullets, ≥ 2 quantified.
 - [x] **H.5 AI Chatbot featured project card** (+ decision on ATS Skipper visibility/name).
       **AC:** card with architecture one-liner, stack, GitHub link, "try it" button opening the widget.
@@ -32,21 +32,21 @@ Items marked 🧑 need facts only Ibryam can provide.
 
 ## Phase 0 — Hygiene & bug fixes
 
-- [ ] **0.1 Fix Tableau scaling heights** — in `frontend/index.html`, the `VIZZES` array (`h:867`, `h:967`) disagrees with the actual iframe heights (868, 1167). Refactor `scaleAll()` to read `data-w`/`data-h` attributes from each `.viz-scaler` (add the missing `data-w="900" data-h="1167"` to `#scaler-smi`) and delete the hardcoded `VIZZES` numbers.
+- [x] **0.1 Fix Tableau scaling heights** — in `frontend/index.html`, the `VIZZES` array (`h:867`, `h:967`) disagrees with the actual iframe heights (868, 1167). Refactor `scaleAll()` to read `data-w`/`data-h` attributes from each `.viz-scaler` (add the missing `data-w="900" data-h="1167"` to `#scaler-smi`) and delete the hardcoded `VIZZES` numbers.
       **AC:** at 1400px, 1024px, 768px and 375px viewport widths, both dashboards show their full height with no clipped bottom and no dead space below.
 - [x] **0.2 Remove empty-RAG auto-flag (regression)** — `backend/agent.py:143` still has `if not unknown_recorded and (not rag_chunks or response_signals_unknown)`. Commit `6e60af2` intended to drop the `not rag_chunks` half. Change condition to `if not unknown_recorded and response_signals_unknown`.
       **AC:** a question the model answers confidently but with zero RAG hits (e.g. "hi") does NOT insert into `unknown_questions`.
-- [ ] **0.3 Prune `_UNCERTAINTY` list** — remove the generic phrases `"that information"`, `"this information"`, `"no details"`, `"not share"` from `backend/agent.py:86-94`; keep only phrases that unambiguously signal "I don't know".
+- [x] **0.3 Prune `_UNCERTAINTY` list** — remove the generic phrases `"that information"`, `"this information"`, `"no details"`, `"not share"` from `backend/agent.py:86-94`; keep only phrases that unambiguously signal "I don't know".
       **AC:** reply "Happy to share that information: he uses BigQuery daily" does not trigger auto-flag.
-- [ ] **0.4 Order history by id** — `backend/memory.py:get_recent_history` → `ORDER BY id DESC` instead of `ts DESC`.
+- [x] **0.4 Order history by id** — `backend/memory.py:get_recent_history` → `ORDER BY id DESC` instead of `ts DESC`.
       **AC:** two messages saved in the same second return in insertion order.
-- [ ] **0.5 Escape FTS5 queries** — in `backend/memory.py:search_faq`, wrap: `safe = '"' + query.replace('"', '""') + '"'` and MATCH on `safe`.
+- [x] **0.5 Escape FTS5 queries** — in `backend/memory.py:search_faq`, wrap: `safe = '"' + query.replace('"', '""') + '"'` and MATCH on `safe`.
       **AC:** `search_faq('what is your "salary" (gross)?')` returns a list, raises nothing.
 - [x] **0.6 Gitignore server logs** — add `backend/server.log` + `backend/server_err.log` (or `backend/*.log`) to `.gitignore`.
       **AC:** `git status` no longer lists them.
 - [x] **0.7 Update CLAUDE.md to reality** — stack section: agent = OpenAI `gpt-4o-mini` (`AGENT_MODEL`), evaluator = Gemini 2.0 Flash → Groq fallback, async log-only (no retry), notifications = Telegram (`TELEGRAM_TOKEN`/`TELEGRAM_CHAT_ID`), env-var table refreshed (`OPENAI_API_KEY`, drop Pushover).
       **AC:** every model/env-var named in CLAUDE.md appears in the code; nothing in CLAUDE.md contradicts `agent.py`/`evaluator.py`/`tools.py`.
-- [ ] **0.8 Commit pending nav-order change** — About before Experience (already in working tree).
+- [x] **0.8 Commit pending nav-order change** — About before Experience (already in working tree).
       **AC:** clean `git status` on `frontend/index.html`.
 
 ## Phase 1 — Design system foundation
@@ -94,7 +94,7 @@ Items marked 🧑 need facts only Ibryam can provide.
       **AC:** `curl -N` against local server shows incremental deltas; tool-call rounds still work (ask a salary question → faq_lookup fires → streamed answer).
 - [ ] **3.2 Frontend streaming render** — widget consumes the stream, renders tokens incrementally with a blinking caret; auto-fallback to `/chat` if stream errors before first delta.
       **AC:** first visible token < 1.5s warm; killing the connection mid-stream shows the retry UI, and retry works.
-- [ ] **3.3 Safe markdown renderer** — headings (h3/h4 → styled `<strong>` blocks), bold, italic, `- `/`1. ` lists, links (https only, `rel="noopener nofollow"`, escaped), code spans. Escapes HTML first; no innerHTML of raw model text.
+- [ ] **3.3 Safe markdown renderer** *(ship together with relaxing the formatting rule in `agent.py` RESPONSE STYLE)* — headings (h3/h4 → styled `<strong>` blocks), bold, italic, `- `/`1. ` lists, links (https only, `rel="noopener nofollow"`, escaped), code spans. Escapes HTML first; no innerHTML of raw model text.
       **AC:** the JD-match response renders headings + bullets correctly; `<img src=x onerror=alert(1)>` in a bot reply renders as literal text.
 - [ ] **3.4 Session persistence** — `session_id` + transcript in `localStorage` (cap 50 messages); restore on load; "Clear chat" control in header wipes both.
       **AC:** reload page → reopen widget → conversation intact; Clear chat → greeting state.

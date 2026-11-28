@@ -67,6 +67,24 @@ AI & Automation: Led and owned multiple AI Python projects in collaboration with
 - Russian: A2
 - French: none
 
+## Impact Highlights (UKG)
+
+- 81 complex data models migrated from Alteryx to Dataform/BigQuery (team initiative, Ibryam a key contributor)
+- 170+ internal, customer-facing and partner-facing reports run on the migrated models
+- About €780k per year saved in Alteryx scheduling and orchestration costs
+- Hands-on role in the self-service analytics beta test and roll-out with customers and partners
+
+## Recommendations (excerpts from UKG reviews and peer feedback)
+
+- Conrad W., Manager (performance review): "Ibryam has been exceptional in his current role — he has taken full ownership of reporting projects from engaging with seniors, requirement gathering, planning data pipelines and building insightful and engaging data products. He has worked directly with customers to help beta-test the self-service analytics and was hugely involved in this roll out. I have been very impressed with his continual growth within the team and look forward to see him continue to lead more projects within the team."
+- Svetla A., Manager (performance review): "Ibryam has consistently demonstrated exceptional performance across all areas of his role as a Senior Business Data Analyst. His contributions have significantly impacted both internal stakeholders, including Managed Services, Platform Support, and Sales, as well as external customers. … His commitment to excellence, continuous improvement, and ability to deliver complex solutions with precision and speed make him an invaluable asset to the team."
+- Hafeez S., Analytics team colleague: "Working with Ibryam over the past year has been a pleasure. He has been incredibly supportive and has played an important part in key Analytics team initiatives, including migrating our models to Dataform and BigQuery and strengthening our data engineering practices. Ibo is a self-starter who brings a collaborative and helpful approach to his work."
+- Daniel P., Peer: "Ibryam has been exceptionally helpful over the last year in aiding me in understanding the self service reporting functions and creating meaningful reports that have aided the sales cycle. … thanks to his support we have been able to demonstrate functionality and value that has set us aside from the competition."
+- Sophia M., Product Manager: "Ibryam is an essential member who is dedicated and tenacious. He delivers items of high quality. He is always willing to go the extra length to really dive into any questions or explanations necessary. He has technical and UX/UI knowledge and can provide feedback and a different perspective."
+- A colleague: "I want to recognize Ibryam for exceptional reliability and dedication to his work. In all his projects he's going the extra mile to ensure the quality of his work in analyzing complex data and transforming it into insightful reports. The precision and clarity of his reports have empowered various departments to make informed decisions."
+
+When quoting, use these names and roles exactly as written (first name + initial). Never name UKG customers or internal report names.
+
 ## Personal Values & Work Style
 
 - Extremely detail-oriented with a strong focus on documentation quality

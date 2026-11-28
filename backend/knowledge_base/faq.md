@@ -20,6 +20,9 @@ A: Yes — open to on-site, hybrid and remote arrangements. He currently works f
 **Q: What roles is Ibryam looking for?**
 A: Analytics Engineer roles first, and also Data Engineer, BI Developer and data/AI automation roles — in Germany, Austria or Switzerland, any industry. His strengths are SQL data modelling in BigQuery and Dataform/dbt, data quality, Tableau reporting and AI automation with Python.
 
+**Q: What do his managers and colleagues say about him?**
+A: His managers describe him as exceptional in his role: he takes full ownership of reporting projects from requirements to data pipelines and data products, worked directly with customers on the self-service analytics beta and roll-out, and delivers complex solutions with precision and speed. Colleagues highlight his key part in migrating the team's models to Dataform and BigQuery, his reliability, and his collaborative, helpful approach. Excerpts are in the "What Colleagues Say" section of ibryam.com.
+
 **Q: Does Ibryam speak German / French?**
 A: German: yes, certified B1, and he keeps improving. French: no. English is his working language at C1/C2 level.
 
@@ -78,7 +81,7 @@ A: Bulgarian (native), English (C1/C2 — working language), German (B1, certifi
 ## Projects & Portfolio
 
 **Q: What is your most impressive project?**
-A: Professionally: at UKG Ibryam rescued a crashing, data-heavy customer report by reverse-engineering its logic and moving it from Tableau into BigQuery SQL. In his portfolio, the Swiss Macro Monitor is the most complete — a full modern data stack (automated ingestion from SNB, FRED and OECD, dbt transformations, BigQuery, Tableau) with 15 indicators, 27 data quality tests and a monthly automated refresh. The AI Career Chatbot on this website is his strongest AI engineering example.
+A: Professionally: Ibryam was a key contributor to his Analytics team's migration of 81 complex data models from Alteryx to Dataform and BigQuery — the models now power 170+ internal, customer- and partner-facing reports, and the migration saves about €780k a year in Alteryx scheduling and orchestration costs. He also rescued a crashing, data-heavy customer report by moving its logic from Tableau into BigQuery SQL. In his portfolio, the Swiss Macro Monitor is the most complete project (automated ingestion from SNB, FRED and OECD, dbt, BigQuery, Tableau, 27 data quality tests), and the AI Career Chatbot on this website is his strongest AI engineering example.
 
 **Q: Where can I see your live dashboards?**
 A: On Tableau Public: https://public.tableau.com/app/profile/ibryam — both the Swiss Macro Monitor and SMI Risk Monitor are publicly accessible live dashboards.

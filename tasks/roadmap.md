@@ -1,6 +1,6 @@
 # ibryam.com — Product Roadmap
 
-**Last updated:** 2026-11-26
+**Last updated:** 2026-11-28
 **Owner:** Ibryam Faik
 **Goal:** Get Ibryam hired as an Analytics Engineer (or Data Engineer / BI / AI automation) in Germany, Austria or Switzerland — via a recruiter-facing portfolio that is convincing first, then polished, with an AI chatbot that feels like a premium product.
 
@@ -8,23 +8,23 @@
 
 ## Open items — carry forward until resolved
 
-Updated 2026-11-26 after Phase H stages 1–3 shipped (`9520413`). Discuss with Ibryam before starting any of these.
+Updated 2026-11-28. Discuss with Ibryam before starting any of these.
 
 | # | Item | Waiting on | Notes |
 |---|------|-----------|-------|
-| O1 | **Add `SALARY_EXPECTATIONS` secret** on the HF Space | Ibryam | Text agreed 2026-11-26 (CH: CHF 90–130k; DE/AT: local market, no EUR figure). Never put the figure in the repo — it is public. |
-| O2 | **H.4 Quantified UKG impact** (2–4 numbers: hours saved, users, report load time before/after…) | Ibryam's numbers | Highest-value remaining content change; then update hero stats, Experience, `experience.md`, CV. |
+| O1 | **Add `SALARY_EXPECTATIONS` secret** on the HF Space | Ibryam | Instructions given 2026-11-28. Never put the figure in the repo — it is public. |
 | O3 | **H.6 German CV** (PDF) + "Lebenslauf (DE)" download | Ibryam (review) | Draft from the EN CV; Ibryam reviews German before publish. |
 | O4 | **H.8 LinkedIn preview check** via Post Inspector | Ibryam | Tags + OG image are live. |
-| O5 | **H.9 Market-gap tally** — ~20 DACH job ads, count required tools | — | Live bot already flagged "Snowflake?" as unknown; likely gaps: Azure, Databricks, Snowflake, Power BI, Airflow. Pick one to close (project or cert). |
-| O6 | **H.10 Social proof** — 1–2 colleague/manager quotes (with permission), booking link | Ibryam | |
-| O7 | Cloudflare managed robots.txt overrides `frontend/robots.txt` | Decision | Either disable it in Cloudflare or submit `sitemap.xml` in Google Search Console. |
+| O5 | **H.9 Market-gap tally** — ~20 DACH job ads, count required tools | — | Live bot flagged "Snowflake?" as unknown; likely gaps: Azure, Databricks, Snowflake, Power BI, Airflow. |
+| O6 | **H.10 booking link** (quotes done 2026-11-28) | Ibryam | e.g. Calendly / Google Calendar appointment page. |
+| O7 | Cloudflare managed robots.txt overrides `frontend/robots.txt` | Decision | Disable it in Cloudflare or submit `sitemap.xml` in Google Search Console. |
 | O8 | Old `OPENAI_API_KEY` secret on the Space is unused | Ibryam | Delete it and revoke the key at OpenAI. |
-| O9 | Phase 0 leftovers: 0.1 Tableau heights, 0.3 `_UNCERTAINTY` list, 0.4 history order by id, 0.5 FTS5 escaping, 0.8 nav-order whitespace change in index.html | — | Small bugs; good warm-up for the next session. |
-| O10 | Skills grid: 5th card ("Visualisation & BI") sits alone on its own row on desktop | — | Cosmetic; fold into Phase 1/2. |
-| O11 | Phase 3.3 (markdown renderer) conflicts with the current system-prompt rule "only **bold** + • bullets" | — | If 3.3 ships, relax that rule in `agent.py` at the same time. |
-| O12 | Pending summaries are held in memory; a Space restart drops them | — | Acceptable now; revisit in Phase 4 (persistence). |
-| O13 | Local commit `3718920` (docs only) not yet pushed | — | Push with the next change. |
+| O14 | **Update the CV PDF** with the migration impact (81 models · 170+ reports · ~€780k/yr) | Ibryam | Site and chatbot already show it; the downloadable CV doesn't yet — recruiters compare them. |
+| O15 | German Kurzprofil: add one sentence on the migration impact | Ibryam (review) | German text changes need Ibryam's approval before publishing. |
+| O16 | Optional: ask colleagues if their **full names** may be shown on the site | Ibryam | Currently first name + initial + role, deliberately. |
+| O17 | Conversation data (SQLite) is wiped on every Space rebuild | — | Phase 4.7 persistence; summaries themselves are now flushed to Telegram on shutdown. |
+
+Resolved 2026-11-28: O2 (UKG impact numbers + quotes live), O9 (Phase 0 bugs + FAQ-never-seeded bug), O10 (skills grid), O11 (folded into Phase 3 step 2), O12 (shutdown flush), O13 (pushed).
 
 How to read this document:
 - Phases are ordered by dependency, not just priority. Phase 1 (design tokens) must land before Phase 2 (UI overhaul) because every Phase 2 step references token names.
@@ -134,7 +134,7 @@ Make the chat feel like a product. Playbook: `.claude/skills/chatbot-upgrade/SKI
 
 **Scope:**
 1. **SSE streaming:** new `POST /chat/stream` (FastAPI `StreamingResponse`), token-by-token render in the widget; fall back to `/chat` on stream failure.
-2. **Markdown rendering:** safe mini-renderer supporting headings, bold/italic, bullet/numbered lists, links (`rel="noopener nofollow"`, https only) — the JD-match analysis already outputs structured markdown that currently renders as flat text.
+2. **Markdown rendering:** safe mini-renderer supporting headings, bold/italic, bullet/numbered lists, links (`rel="noopener nofollow"`, https only) — the JD-match analysis already outputs structured markdown that currently renders as flat text. **Ship together with** relaxing the RESPONSE STYLE rule in `backend/agent.py` (currently: only **bold** and "• " bullets, no headings/italics/tables) to match what the renderer supports.
 3. **Session persistence:** `session_id` + transcript in `localStorage`; restore on reopen; "Clear conversation" action.
 4. **Contextual suggestions:** initial pills persist as a re-suggestible row; after a JD match, offer follow-ups ("What about his German level?", "Contact Ibryam").
 5. **Feedback:** 👍/👎 per bot message → `POST /feedback` → SQLite + Telegram on 👎.

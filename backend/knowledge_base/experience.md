@@ -8,6 +8,8 @@
 UKG is a global HR and workforce management software company. Ibryam's official title is Senior Business Data Analyst; the work itself is analytics engineering — SQL data modelling and scheduled transformation workflows in Google BigQuery and Dataform, plus reporting in Tableau and AI automation in Python.
 
 Key responsibilities and achievements:
+- Key contributor to the Analytics team's migration of 81 complex data models from Alteryx to Dataform and BigQuery. The migrated models power 170+ internal, customer-facing and partner-facing reports, and the migration saves about €780k a year in Alteryx scheduling and orchestration costs. (This was a team initiative; Ibryam was a key contributor, not the sole owner.)
+- Helped beta-test and roll out self-service analytics directly with customers and partners.
 - Build and maintain SQL data models and transformation workflows in Google BigQuery and Dataform (star and snowflake schemas) that run on schedules with managed dependencies and feed production dashboards used by internal teams and customers.
 - Fixed a crashing, data-heavy customer report by reverse-engineering its calculation logic, migrating it from Tableau into BigQuery SQL, reducing the data volume and caching results; validated the new output against the original.
 - Implemented customer- and country-level row-level security for an internal operations team, using user attributes and rule-based access logic.

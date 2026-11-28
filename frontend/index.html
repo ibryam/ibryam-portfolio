@@ -186,7 +186,7 @@
     .tech-badge { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 0.25rem 0.8rem; font-size: 0.78rem; color: var(--muted); }
 
     /* ── SKILLS ── */
-    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 1.2rem; }
     .skill-group { background: var(--navy-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
     .skill-group-title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 1rem; }
     .skill-item { font-size: 0.9rem; color: var(--text); padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -227,6 +227,15 @@
     .tl-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .tl-list { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin: 0 0 0.8rem 1.1rem; }
     .tl-list li { margin-bottom: 0.35rem; }
+    .tl-list strong { color: var(--text); }
+
+    /* ── TESTIMONIALS ── */
+    .quotes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 1.5rem; }
+    .quote-card { background: var(--navy-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.6rem; display: flex; flex-direction: column; }
+    .quote-card blockquote { color: var(--text); font-size: 0.93rem; line-height: 1.7; flex: 1; }
+    .quote-card blockquote::before { content: '“'; display: block; font-size: 2.4rem; line-height: 1; color: var(--teal); margin-bottom: 0.2rem; }
+    .quote-card figcaption { margin-top: 1.2rem; font-size: 0.82rem; color: var(--muted); }
+    .quote-card figcaption strong { color: var(--teal); font-weight: 600; }
 
     /* ── VIZ EMBED ── */
     .viz-container { width: 100%; overflow: hidden; position: relative; border-radius: 10px; border: 1px solid var(--border); margin-top: 1.8rem; background: #0d1b33; }
@@ -409,11 +418,11 @@
 <!-- STATS BAR -->
 <div class="stats">
   <div class="stats-inner">
-    <div><div class="stat-num">5+</div><div class="stat-label">Years in Data</div></div>
-    <div><div class="stat-num">5+</div><div class="stat-label">Years of Tableau</div></div>
-    <div><div class="stat-num">B1</div><div class="stat-label">German, certified</div></div>
-    <div><div class="stat-num">2</div><div class="stat-label">Certifications · dbt · Alteryx</div></div>
-    <div><div class="stat-num">3</div><div class="stat-label">Live portfolio projects</div></div>
+    <div><div class="stat-num">81</div><div class="stat-label">Data models migrated<br>Alteryx → Dataform</div></div>
+    <div><div class="stat-num">170+</div><div class="stat-label">Reports running<br>on the new models</div></div>
+    <div><div class="stat-num">~€780k</div><div class="stat-label">Annual Alteryx<br>costs saved</div></div>
+    <div><div class="stat-num">5+</div><div class="stat-label">Years in data</div></div>
+    <div><div class="stat-num">B1</div><div class="stat-label">German,<br>certified</div></div>
   </div>
 </div>
 
@@ -498,7 +507,7 @@
           <span class="tech-badge">Tableau Public</span>
         </div>
         <div class="viz-container" id="container-smi">
-          <div class="viz-scaler" id="scaler-smi" style="width:900px;height:1167px;">
+          <div class="viz-scaler" id="scaler-smi" data-w="900" data-h="1167" style="width:900px;height:1167px;">
             <iframe src="https://public.tableau.com/views/SMIRiskMonitor/Performance?:showVizHome=no&:embed=true&:tabs=yes&:toolbar=bottom&:animate_transition=yes&:display_count=yes&:language=en-US"
                     width="900" height="1167" frameborder="0" scrolling="no" allowfullscreen></iframe>
           </div>
@@ -682,6 +691,8 @@
             <span class="tl-years">Jul 2022 – Present</span>
           </div>
           <ul class="tl-list">
+            <li><strong>Key contributor to the Analytics team's migration of 81 complex data models from Alteryx to Dataform and BigQuery</strong> — now powering 170+ internal, customer- and partner-facing reports and saving ~€780k a year in Alteryx scheduling and orchestration costs.</li>
+            <li>Helped beta-test and roll out self-service analytics directly with customers and partners.</li>
             <li>Build and maintain SQL data models and scheduled transformation workflows in BigQuery and Dataform (star and snowflake schemas) feeding production dashboards for internal teams and customers.</li>
             <li>Rescued a crashing, data-heavy customer report: reverse-engineered its logic, moved it from Tableau into BigQuery SQL, reduced data volume and cached results — validated against the original.</li>
             <li>Implemented customer- and country-level row-level security for an operations team using user attributes and rule-based access.</li>
@@ -752,6 +763,33 @@
         </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-inner">
+    <div class="section-label">Recommendations</div>
+    <h2 class="section-title">What Colleagues Say</h2>
+    <p class="section-desc">Excerpts from performance reviews and peer feedback at UKG.</p>
+    <div class="quotes-grid">
+      <figure class="quote-card">
+        <blockquote>Ibryam has been exceptional in his current role — he has taken full ownership of reporting projects from engaging with seniors, requirement gathering, planning data pipelines and building insightful and engaging data products. He has worked directly with customers to help beta-test the self-service analytics and was hugely involved in this roll out.</blockquote>
+        <figcaption><strong>Conrad W.</strong> · Manager, UKG · performance review</figcaption>
+      </figure>
+      <figure class="quote-card">
+        <blockquote>He has been incredibly supportive and has played an important part in key Analytics team initiatives, including migrating our models to Dataform and BigQuery and strengthening our data engineering practices. Ibo is a self-starter who brings a collaborative and helpful approach to his work.</blockquote>
+        <figcaption><strong>Hafeez S.</strong> · Analytics team colleague, UKG</figcaption>
+      </figure>
+      <figure class="quote-card">
+        <blockquote>Ibryam has consistently demonstrated exceptional performance across all areas of his role as a Senior Business Data Analyst. His contributions have significantly impacted both internal stakeholders … and external customers. … His commitment to excellence, continuous improvement, and ability to deliver complex solutions with precision and speed make him an invaluable asset to the team.</blockquote>
+        <figcaption><strong>Svetla A.</strong> · Manager, UKG · performance review</figcaption>
+      </figure>
+      <figure class="quote-card">
+        <blockquote>Ibryam has been exceptionally helpful over the last year in aiding me in understanding the self service reporting functions and creating meaningful reports that have aided the sales cycle.</blockquote>
+        <figcaption><strong>Daniel P.</strong> · Peer, UKG · review feedback</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -939,18 +977,12 @@
   }
 
   // ── Tableau viz scaling ───────────────────────────────────────────────────
-  var VIZZES = [
-    {cId:'container-swiss', sId:'scaler-swiss', w:1200, h:867},
-    {cId:'container-smi',   sId:'scaler-smi',   w:900,  h:967}
-  ];
   function scaleAll() {
-    VIZZES.forEach(function(v) {
-      var c = document.getElementById(v.cId);
-      var s = document.getElementById(v.sId);
-      if (!c || !s) return;
-      var scale = c.offsetWidth / v.w;
+    document.querySelectorAll('.viz-scaler').forEach(function(s) {
+      var c = s.parentElement;
+      var scale = c.offsetWidth / Number(s.dataset.w);
       s.style.transform = 'scale(' + scale + ')';
-      c.style.height = (v.h * scale) + 'px';
+      c.style.height = (Number(s.dataset.h) * scale) + 'px';
     });
   }
   window.addEventListener('resize', scaleAll);
