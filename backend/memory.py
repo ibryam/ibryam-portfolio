@@ -62,7 +62,8 @@ def init_db() -> None:
                 ts         DATETIME DEFAULT CURRENT_TIMESTAMP
             );
         """)
-    _seed_faq(conn)
+    with conn:
+        _seed_faq(conn)
     conn.close()
 
 
@@ -112,7 +113,7 @@ def get_recent_history(session_id: str, limit: int = 10) -> list[dict]:
     rows = conn.execute(
         """SELECT role, content FROM conversations
            WHERE session_id = ?
-           ORDER BY ts DESC LIMIT ?""",
+           ORDER BY id DESC LIMIT ?""",
         (session_id, limit),
     ).fetchall()
     conn.close()
@@ -121,7 +122,17 @@ def get_recent_history(session_id: str, limit: int = 10) -> list[dict]:
 
 # ── FAQ lookup ───────────────────────────────────────────────────────────────
 
+def _fts_query(text: str) -> str:
+    # Quote each word so FTS5 operators/punctuation (", -, (, ?) can't break the syntax;
+    # OR + rank lets natural-language questions match on their best words.
+    words = re.findall(r"\w+", text)
+    return " OR ".join(f'"{w}"' for w in words)
+
+
 def search_faq(query: str, limit: int = 3) -> list[dict]:
+    fts_query = _fts_query(query)
+    if not fts_query:
+        return []
     conn = get_connection()
     rows = conn.execute(
         """SELECT f.question, f.answer
@@ -130,7 +141,7 @@ def search_faq(query: str, limit: int = 3) -> list[dict]:
            WHERE faq_fts MATCH ?
            ORDER BY rank
            LIMIT ?""",
-        (query, limit),
+        (fts_query, limit),
     ).fetchall()
     conn.close()
     return [{"question": r["question"], "answer": r["answer"]} for r in rows]

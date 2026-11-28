@@ -50,7 +50,7 @@ def _format_transcript(messages: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def _send_summary(session_id: str, ip: str) -> None:
+def _send_summary(session_id: str, ip: str, send=_notify) -> None:
     messages = get_conversation(session_id)
     already_sent = _reported_counts.get(session_id, 0)
     new_messages = messages[already_sent:]
@@ -68,7 +68,7 @@ def _send_summary(session_id: str, ip: str) -> None:
         f"💬 {questions} question(s), {count_session_unknown_questions(session_id)} unknown\n"
         f"Session: {session_id[:8]}"
     )
-    _notify(title, header + "\n" + _format_transcript(new_messages))
+    send(title, header + "\n" + _format_transcript(new_messages))
 
 
 async def _summary_loop() -> None:
@@ -97,6 +97,18 @@ async def lifespan(app: FastAPI):
     summary_task = asyncio.create_task(_summary_loop())
     yield
     summary_task.cancel()
+    _flush_summaries()
+
+
+def _flush_summaries() -> None:
+    # HF Spaces restarts start from a fresh disk, so pending summaries can't be persisted —
+    # send them synchronously on shutdown instead (the queue worker thread may not drain in time).
+    for sid, (_, ip) in list(_active_sessions.items()):
+        try:
+            _send_summary(sid, ip, send=_telegram)
+        except Exception as e:
+            print(f"[summary] shutdown flush failed for {sid[:8]}: {e}")
+    _active_sessions.clear()
 
 
 app = FastAPI(title="Ibryam AI Chatbot", lifespan=lifespan)

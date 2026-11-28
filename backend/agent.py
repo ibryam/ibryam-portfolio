@@ -116,9 +116,8 @@ _UNCERTAINTY = [
     "i don't have", "i do not have", "no information", "not provided", "cannot find",
     "not specified", "doesn't include", "does not include", "i'm not sure", "i am not sure",
     "don't have access", "do not have access", "not in the profile", "not included in",
-    "no details", "doesn't contain", "does not contain", "not covered", "isn't covered",
-    "no mention", "isn't listed", "is not listed", "not share", "hasn't shared",
-    "that information", "this information", "unavailable", "not disclosed",
+    "doesn't contain", "does not contain", "not covered", "isn't covered",
+    "no mention", "isn't listed", "is not listed", "hasn't shared", "unavailable", "not disclosed",
 ]
 
 
