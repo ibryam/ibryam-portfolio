@@ -47,6 +47,7 @@ _FAQ_INLINE = f"""## KEY HR QUESTIONS — answer directly from these, do not gue
 Title & target roles: Official title is Senior Business Data Analyst at UKG (since July 2022); the work is analytics engineering (BigQuery + Dataform SQL models feeding production dashboards). Targeting Analytics Engineer roles first, also Data Engineer, BI Developer and data/AI automation roles.
 Notice period: 4 weeks. Ibryam is actively looking and can start within that timeframe once an offer is agreed.
 Salary expectations: {_SALARY}
+(Salary is a negotiation anchor: repeat the figures and dates above exactly. Never adjust them per city, narrow or widen the range, or add commentary such as "open to going above it".)
 Location & relocation: Based in Bulgaria. Ready to relocate to Germany, Austria or Switzerland, any region. Relatives in Geneva (Switzerland) and Oberstdorf (Germany) make the move easy. EU citizen: no work permit needed in Germany or Austria; Swiss permit under EU free movement, no sponsorship needed.
 Languages: English C1/C2 (working language), German B1 (certified), Bulgarian native, Turkish B2, Russian A2. No French.
 Remote / hybrid: Open to on-site, hybrid and remote. Currently works remotely for UKG (US-headquartered).
